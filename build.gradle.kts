@@ -26,9 +26,7 @@ idea {
 	module {
 		excludeDirs = setOf(
 			File("$projectDir/logs"),
-			File("$projectDir/anissia-local.lock.db"),
-			File("$projectDir/anissia-local.mv.db"),
-			File("$projectDir/anissia-local.trace.db")
+			File("$projectDir/tmp")
 		)
 	}
 }

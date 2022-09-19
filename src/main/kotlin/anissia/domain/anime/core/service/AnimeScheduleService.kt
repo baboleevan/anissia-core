@@ -1,7 +1,7 @@
 package anissia.domain.anime.core.service
 
 import anissia.domain.anime.core.model.AnimeScheduleDto
-import anissia.domain.anime.infrastructure.AnimeRepository
+import anissia.domain.anime.core.ports.outbound.AnimeRepository
 import anissia.domain.temp.core.service.GoogleAnalyticsProxyService
 import me.saro.kit.CacheStore
 import org.springframework.stereotype.Service

@@ -1,4 +1,4 @@
-package anissia.domain.anime.infrastructure
+package anissia.domain.anime.core.ports.outbound
 
 import anissia.domain.anime.core.AnimeStore
 import org.springframework.data.jpa.repository.JpaRepository

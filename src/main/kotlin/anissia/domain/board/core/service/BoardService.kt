@@ -6,9 +6,9 @@ import anissia.domain.board.core.model.BoardPostRequest
 import anissia.domain.board.core.model.BoardTickerDto
 import anissia.domain.board.core.model.BoardTopicDto
 import anissia.domain.board.core.model.BoardTopicRequest
-import anissia.domain.board.infrastructure.BoardPostRepository
-import anissia.domain.board.infrastructure.BoardTickerRepository
-import anissia.domain.board.infrastructure.BoardTopicRepository
+import anissia.domain.board.core.ports.outbound.BoardPostRepository
+import anissia.domain.board.core.ports.outbound.BoardTickerRepository
+import anissia.domain.board.core.ports.outbound.BoardTopicRepository
 import anissia.domain.temp.core.model.SessionService
 import anissia.infrastructure.common.As
 import anissia.shared.ResultData

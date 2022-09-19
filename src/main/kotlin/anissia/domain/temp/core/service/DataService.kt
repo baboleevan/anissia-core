@@ -2,16 +2,16 @@ package anissia.domain.temp.core.service
 
 import anissia.domain.account.core.Account
 import anissia.domain.account.core.AccountRole
-import anissia.domain.account.infrastructure.AccountRepository
+import anissia.domain.account.core.ports.outbound.AccountRepository
 import anissia.domain.activePanel.core.service.ActivePanelService
 import anissia.domain.anime.core.service.AnimeRankService
 import anissia.domain.anime.core.service.AnimeService
-import anissia.domain.anime.infrastructure.AnimeGenreRepository
-import anissia.domain.anime.infrastructure.AnimeRepository
+import anissia.domain.anime.core.ports.outbound.AnimeGenreRepository
+import anissia.domain.anime.core.ports.outbound.AnimeRepository
 import anissia.domain.board.core.BoardTicker
 import anissia.domain.board.core.BoardTopic
-import anissia.domain.board.infrastructure.BoardTickerRepository
-import anissia.domain.board.infrastructure.BoardTopicRepository
+import anissia.domain.board.core.ports.outbound.BoardTickerRepository
+import anissia.domain.board.core.ports.outbound.BoardTopicRepository
 import anissia.infrastructure.common.As
 import anissia.domain.anime.core.Anime
 import anissia.domain.anime.core.AnimeGenre

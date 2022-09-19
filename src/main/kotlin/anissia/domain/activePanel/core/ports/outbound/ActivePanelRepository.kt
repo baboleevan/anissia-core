@@ -1,4 +1,4 @@
-package anissia.domain.activePanel.infrastructure
+package anissia.domain.activePanel.core.ports.outbound
 
 import anissia.domain.activePanel.core.ActivePanel
 import org.springframework.data.domain.Page

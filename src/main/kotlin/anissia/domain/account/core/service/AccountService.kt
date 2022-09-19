@@ -1,12 +1,14 @@
-package anissia.domain.account.infrastructure
+package anissia.domain.account.core.service
 
 import anissia.domain.account.core.model.AccountUpdateNameRequest
 import anissia.domain.account.core.model.AccountUpdatePasswordRequest
 import anissia.domain.account.core.model.AccountUserDto
+import anissia.domain.account.core.ports.outbound.AccountBanNameRepository
+import anissia.domain.account.core.ports.outbound.AccountRepository
 import anissia.domain.activePanel.core.service.ActivePanelService
-import anissia.domain.agenda.infrastructure.AgendaRepository
+import anissia.domain.agenda.core.ports.outbound.AgendaRepository
 import anissia.domain.anime.core.service.AnimeService
-import anissia.domain.anime.infrastructure.AnimeCaptionRepository
+import anissia.domain.anime.core.ports.outbound.AnimeCaptionRepository
 import anissia.domain.temp.core.model.SessionService
 import anissia.domain.temp.core.service.TranslatorService
 import anissia.infrastructure.configruration.logger

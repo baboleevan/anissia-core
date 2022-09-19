@@ -1,9 +1,11 @@
-package anissia.domain.account.infrastructure
+package anissia.domain.account.core.service
 
 import anissia.domain.account.core.Account
 import anissia.domain.account.core.AccountRecoverAuth
 import anissia.domain.account.core.model.AccountRecoverPasswordRequest
 import anissia.domain.account.core.model.AccountRecoverRequest
+import anissia.domain.account.core.ports.outbound.AccountRecoverAuthRepository
+import anissia.domain.account.core.ports.outbound.AccountRepository
 import anissia.domain.temp.core.model.EmailAuthTokenRequest
 import anissia.domain.temp.core.service.AsyncService
 import anissia.domain.temp.core.service.EmailService

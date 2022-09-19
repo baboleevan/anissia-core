@@ -13,7 +13,7 @@ import javax.sql.DataSource
 @EnableAutoConfiguration
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = ["anissia.rdb.repository"])
+@EnableJpaRepositories(basePackages = ["anissia.domain.*"])
 class DBConfiguration(
 
     @Value("\${anissia.rdb.driverClassName}")

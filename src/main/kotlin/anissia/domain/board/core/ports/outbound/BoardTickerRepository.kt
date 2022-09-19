@@ -1,4 +1,4 @@
-package anissia.domain.board.infrastructure
+package anissia.domain.board.core.ports.outbound
 
 import anissia.domain.board.core.BoardTicker
 import org.springframework.data.jpa.repository.JpaRepository

@@ -1,4 +1,4 @@
-package anissia.domain.agenda.infrastructure
+package anissia.domain.agenda.core.ports.outbound
 
 import anissia.domain.agenda.core.Agenda
 import org.springframework.data.domain.Page

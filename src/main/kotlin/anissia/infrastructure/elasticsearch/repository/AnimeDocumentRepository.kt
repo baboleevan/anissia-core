@@ -14,13 +14,25 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 interface AnimeDocumentRepository : ElasticsearchRepository<AnimeDocument, Long>, AnimeDocumentRepositoryCustom
 
 interface AnimeDocumentRepositoryCustom {
-    fun findAllAnimeNoForAnimeSearch(keywords: List<String>, genres: List<String>, translators: List<String>, end: Boolean, pageable: Pageable): Page<Long>
+    fun findAllAnimeNoForAnimeSearch(
+        keywords: List<String>,
+        genres: List<String>,
+        translators: List<String>,
+        end: Boolean,
+        pageable: Pageable
+    ): Page<Long>
 }
 
 class AnimeDocumentRepositoryCustomImpl(
     private val operations: ElasticsearchOperations
-): AnimeDocumentRepositoryCustom {
-    override fun findAllAnimeNoForAnimeSearch(keywords: List<String>, genres: List<String>, translators: List<String>, end: Boolean, pageable: Pageable): Page<Long> {
+) : AnimeDocumentRepositoryCustom {
+    override fun findAllAnimeNoForAnimeSearch(
+        keywords: List<String>,
+        genres: List<String>,
+        translators: List<String>,
+        end: Boolean,
+        pageable: Pageable
+    ): Page<Long> {
         val query = NativeSearchQueryBuilder().withPageable(pageable)
 
         if (keywords.isNotEmpty()) {
@@ -37,6 +49,7 @@ class AnimeDocumentRepositoryCustomImpl(
             query.withSort(SortBuilders.fieldSort("endDate").order(SortOrder.DESC))
         }
 
-        return SearchHitSupport.searchPageFor(operations.search(query.build(), AnimeDocument::class.java), pageable).map { it.content.animeNo }
+        return SearchHitSupport.searchPageFor(operations.search(query.build(), AnimeDocument::class.java), pageable)
+            .map { it.content.animeNo }
     }
 }

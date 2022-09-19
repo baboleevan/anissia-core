@@ -5,27 +5,27 @@ import javax.persistence.*
 
 @Entity
 @Table(
-        indexes = [
-                Index(name = "login_pass_idx__passDt", columnList = "passDt"),
-                Index(name = "login_pass_idx__an", columnList = "an")
-        ]
+    indexes = [
+        Index(name = "login_pass_idx__passDt", columnList = "passDt"),
+        Index(name = "login_pass_idx__an", columnList = "an")
+    ]
 )
-data class LoginPass (
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(nullable = false)
-        var loginPassNo: Long = 0,
+data class LoginPass(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    var loginPassNo: Long = 0,
 
-        @Column(nullable = false)
-        var an: Long = 0,
+    @Column(nullable = false)
+    var an: Long = 0,
 
-        @Column(nullable = false, length = 10)
-        var connType: String = "",
+    @Column(nullable = false, length = 10)
+    var connType: String = "",
 
-        @Column(nullable = false, length = 40)
-        var ip: String = "",
+    @Column(nullable = false, length = 40)
+    var ip: String = "",
 
-        @Column(nullable = false)
-        var passDt: LocalDateTime = LocalDateTime.now()
+    @Column(nullable = false)
+    var passDt: LocalDateTime = LocalDateTime.now()
 )
 
 /*

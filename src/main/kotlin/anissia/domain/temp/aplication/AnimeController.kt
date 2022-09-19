@@ -40,7 +40,8 @@ class AnimeController(
     // - caption
 
     @GetMapping("/caption/animeNo/{animeNo:[\\d]+}")
-    fun getCaptionByAnimeNo(@PathVariable animeNo: Long): List<AnimeCaptionDto> = animeService.getCaptionByAnimeNo(animeNo)
+    fun getCaptionByAnimeNo(@PathVariable animeNo: Long): List<AnimeCaptionDto> =
+        animeService.getCaptionByAnimeNo(animeNo)
 
     @GetMapping("/caption/recent", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCaptionRecent() = animeCaptionRecentService.getRecentList()
@@ -51,7 +52,8 @@ class AnimeController(
     fun getSchedule(@PathVariable week: String): List<AnimeScheduleDto> = animeScheduleService.getSchedule(week)
 
     @GetMapping("/schedule/svg/{width:[\\d]{3}}/{color:[a-z\\d]{36}}", produces = ["image/svg+xml;charset=utf-8"])
-    fun getScheduleSvg(@PathVariable width: String, @PathVariable color: String) = animeScheduleService.getScheduleSvg(width, color)
+    fun getScheduleSvg(@PathVariable width: String, @PathVariable color: String) =
+        animeScheduleService.getScheduleSvg(width, color)
 
     // - rank
 

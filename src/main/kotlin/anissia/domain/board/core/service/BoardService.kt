@@ -1,18 +1,18 @@
 package anissia.domain.board.core.service
 
-import anissia.domain.board.core.model.BoardTickerDto
-import anissia.domain.board.core.model.BoardTopicDto
-import anissia.shared.ResultData
-import anissia.shared.ResultStatus
-import anissia.domain.board.core.model.BoardPostRequest
-import anissia.domain.board.core.model.BoardTopicRequest
-import anissia.infrastructure.common.As
 import anissia.domain.board.core.BoardPost
 import anissia.domain.board.core.BoardTopic
+import anissia.domain.board.core.model.BoardPostRequest
+import anissia.domain.board.core.model.BoardTickerDto
+import anissia.domain.board.core.model.BoardTopicDto
+import anissia.domain.board.core.model.BoardTopicRequest
 import anissia.domain.board.infrastructure.BoardPostRepository
 import anissia.domain.board.infrastructure.BoardTickerRepository
 import anissia.domain.board.infrastructure.BoardTopicRepository
 import anissia.domain.temp.core.model.SessionService
+import anissia.infrastructure.common.As
+import anissia.shared.ResultData
+import anissia.shared.ResultStatus
 import me.saro.kit.CacheStore
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -49,18 +49,18 @@ class BoardService(
             ?.let {
                 val topic = boardTopicRepository.saveAndFlush(
                     BoardTopic(
-                    ticker = ticker,
-                    topic = boardTopicRequest.topic,
-                    an = session!!.an,
-                )
+                        ticker = ticker,
+                        topic = boardTopicRequest.topic,
+                        an = session!!.an,
+                    )
                 )
                 boardPostRepository.saveAndFlush(
                     BoardPost(
-                    topicNo = topic.topicNo,
-                    root = true,
-                    content = boardTopicRequest.content,
-                    an = session!!.an,
-                )
+                        topicNo = topic.topicNo,
+                        root = true,
+                        content = boardTopicRequest.content,
+                        an = session!!.an,
+                    )
                 )
                 ResultData<Long>("OK", "", topic.topicNo)
             }
@@ -101,10 +101,10 @@ class BoardService(
             ?.let {
                 boardPostRepository.saveAndFlush(
                     BoardPost(
-                    topicNo = topicNo,
-                    content = boardPostRequest.content,
-                    an = session!!.an,
-                )
+                        topicNo = topicNo,
+                        content = boardPostRequest.content,
+                        an = session!!.an,
+                    )
                 )
                 boardTopicRepository.updatePostCount(topicNo)
                 ResultStatus("OK")
@@ -156,9 +156,11 @@ class BoardService(
     private fun getRecent(ticker: String): List<Map<String, Any>> =
         boardTopicRepository
             .findTop5ByTickerAndFixedOrderByTopicNoDesc(ticker)
-            .map { mapOf(
-                "topicNo" to it.topicNo,
-                "title" to "${it.topic}${if (it.postCount > 0) " (${it.postCount})" else ""}",
-                "regDt" to it.regDt.format(DateTimeFormatter.ISO_DATE_TIME)
-            ) }
+            .map {
+                mapOf(
+                    "topicNo" to it.topicNo,
+                    "title" to "${it.topic}${if (it.postCount > 0) " (${it.postCount})" else ""}",
+                    "regDt" to it.regDt.format(DateTimeFormatter.ISO_DATE_TIME)
+                )
+            }
 }

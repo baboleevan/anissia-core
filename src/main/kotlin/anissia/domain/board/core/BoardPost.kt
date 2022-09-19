@@ -7,9 +7,9 @@ import javax.persistence.*
 
 @Entity
 @Table(
-        indexes = [Index(name = "board_post_idx__topicNo_postNo", columnList = "topicNo,postNo")]
+    indexes = [Index(name = "board_post_idx__topicNo_postNo", columnList = "topicNo,postNo")]
 )
-data class BoardPost (
+data class BoardPost(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,13 @@ data class BoardPost (
     var updDt: LocalDateTime = LocalDateTime.now(),
 
     @OneToOne
-    @JoinColumn(name = "an", foreignKey = ForeignKey(name = "board_post_fk_account"), nullable = false, insertable = false, updatable = false)
+    @JoinColumn(
+        name = "an",
+        foreignKey = ForeignKey(name = "board_post_fk_account"),
+        nullable = false,
+        insertable = false,
+        updatable = false
+    )
     var account: Account? = null,
 )
 

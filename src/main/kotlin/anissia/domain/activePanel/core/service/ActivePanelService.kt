@@ -1,15 +1,15 @@
 package anissia.domain.activePanel.core.service
 
-import anissia.domain.activePanel.core.model.ActivePanelDto
-import anissia.shared.ResultStatus
-import anissia.domain.activePanel.core.model.ActivePanelNoticeRequest
-import anissia.infrastructure.common.As
 import anissia.domain.account.core.AccountRole
-import anissia.rdb.entity.ActivePanel
 import anissia.domain.account.infrastructure.AccountRepository
-import anissia.domain.temp.core.service.AdminService
-import anissia.domain.temp.core.model.SessionService
+import anissia.domain.activePanel.core.model.ActivePanelDto
+import anissia.domain.activePanel.core.model.ActivePanelNoticeRequest
 import anissia.domain.activePanel.infrastructure.ActivePanelRepository
+import anissia.domain.temp.core.model.SessionService
+import anissia.domain.temp.core.service.AdminService
+import anissia.infrastructure.common.As
+import anissia.domain.activePanel.core.ActivePanel
+import anissia.shared.ResultStatus
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -33,7 +33,14 @@ class ActivePanelService(
             .map { ActivePanelDto(it) }
 
     fun saveText(text: String, published: Boolean = true, an: Long? = null) =
-        activePanelRepository.save(ActivePanel(published = published, an = an ?: user?.an ?: 0, code = "TEXT", data1 = text))
+        activePanelRepository.save(
+            ActivePanel(
+                published = published,
+                an = an ?: user?.an ?: 0,
+                code = "TEXT",
+                data1 = text
+            )
+        )
 
     fun saveNotice(apnr: ActivePanelNoticeRequest): ResultStatus {
         if (apnr.commend) { // commend
@@ -57,11 +64,19 @@ class ActivePanelService(
                         return ResultStatus("FAIL", "${user.name}님은 자막제작자 권한을 가지고 있지 않습니다.")
                     }
                 }
+
                 else -> return ResultStatus("FAIL", "존재하지 않는 명령입니다.")
             }
 
         } else { // just text
-            activePanelRepository.save(ActivePanel(published = apnr.published, an = user?.an ?: 0, code = "TEXT", data1 = "《공지》 ${user?.name} : ${apnr.text}"))
+            activePanelRepository.save(
+                ActivePanel(
+                    published = apnr.published,
+                    an = user?.an ?: 0,
+                    code = "TEXT",
+                    data1 = "《공지》 ${user?.name} : ${apnr.text}"
+                )
+            )
         }
         return ResultStatus("OK")
     }

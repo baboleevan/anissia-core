@@ -19,12 +19,12 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
     basePackageClasses = [ElasticsearchRepository::class]
 )
 class NDBConfiguration(
-        @Value("\${anissia.ndb.host}")
-        private val host: String,
-        @Value("\${anissia.ndb.port}")
-        private val port: Int
+    @Value("\${anissia.ndb.host}")
+    private val host: String,
+    @Value("\${anissia.ndb.port}")
+    private val port: Int
 ) : AbstractElasticsearchConfiguration() {
     @Bean
-    override fun elasticsearchClient(): RestHighLevelClient
-        = RestClients.create(ClientConfiguration.builder().connectedTo("$host:$port").build()).rest()
+    override fun elasticsearchClient(): RestHighLevelClient =
+        RestClients.create(ClientConfiguration.builder().connectedTo("$host:$port").build()).rest()
 }

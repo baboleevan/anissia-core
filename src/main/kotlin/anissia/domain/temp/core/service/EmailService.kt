@@ -29,17 +29,17 @@ import javax.mail.internet.InternetAddress
  * ====================
  * example (email.json)
  * ====================
-   {
-       "from": "auth@saro.me"
-       "host": "smtp.saro.me"
-       "port": "935"
-       "username": "auth@saro.me"
-       "password": "password"
-   }
+{
+"from": "auth@saro.me"
+"host": "smtp.saro.me"
+"port": "935"
+"username": "auth@saro.me"
+"password": "password"
+}
  */
 @Service
-class EmailService (
-        @Value("\${env}") private val env: String
+class EmailService(
+    @Value("\${env}") private val env: String
 ) {
     private val enable: Boolean
     private val props: Map<String, String>
@@ -80,7 +80,8 @@ class EmailService (
      * @param subject mail subject
      * @param htmlContent mail content (html)
      */
-    fun send(to: String, subject: String, htmlContent: String): ResultData<String> = send(listOf(to), listOf(), subject, htmlContent)
+    fun send(to: String, subject: String, htmlContent: String): ResultData<String> =
+        send(listOf(to), listOf(), subject, htmlContent)
 
     /**
      * @param to receive to
@@ -100,23 +101,27 @@ class EmailService (
             }
             ResultData("OK", "", "")
         } else {
-            log.debug("""
+            log.debug(
+                """
                     EMAIL DEVELOP MODE
                     to: $to
                     cc: $cc
                     subject: $subject
                     content: $htmlContent
-                """.trimIndent())
+                """.trimIndent()
+            )
             ResultData("OK", "", "")
         }
     } catch (e: Exception) {
-        log.debug("""
+        log.debug(
+            """
             EMAIL ERROR
             to: $to
             cc: $cc
             subject: $subject
             content: $htmlContent
-        """.trimIndent())
+        """.trimIndent()
+        )
         log.error(e.message, e)
         ResultData("ERROR", e.message, "")
     }

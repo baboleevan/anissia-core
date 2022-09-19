@@ -43,11 +43,13 @@ class As {
 
         fun <T> String.toClassByJson(valueTypeRef: TypeReference<T>) = OBJECT_MAPPER.readValue(this, valueTypeRef)!!
 
-        fun <T> String.toMapByJson() = this.toClassByJson(object: TypeReference<Map<String, Any>>(){})
+        fun <T> String.toMapByJson() = this.toClassByJson(object : TypeReference<Map<String, Any>>() {})
 
-        fun <T, U> replacePage(page: Page<U>, list: List<T>): Page<T> = PageImpl(list, page.pageable, page.totalElements)
+        fun <T, U> replacePage(page: Page<U>, list: List<T>): Page<T> =
+            PageImpl(list, page.pageable, page.totalElements)
 
-        fun <T> filterPage(page: Page<T>, filter: (T) -> Boolean): Page<T> = PageImpl(page.content.filter { filter(it) }, page.pageable, page.totalElements)
+        fun <T> filterPage(page: Page<T>, filter: (T) -> Boolean): Page<T> =
+            PageImpl(page.content.filter { filter(it) }, page.pageable, page.totalElements)
 
         fun getHttp400(msg: String): MethodArgumentNotValidException {
             val errors = BeanPropertyBindingResult(null, "").apply { reject("400", msg) }
@@ -59,9 +61,16 @@ class As {
         }
 
         fun throwHttp400If(msg: String, isError: Boolean) {
-            if (isError) { throwHttp400(msg) }
+            if (isError) {
+                throwHttp400(msg)
+            }
         }
-        fun throwHttp400Exception(msg: String, exec: () -> Unit) = try { exec() } catch (e: Exception) { throwHttp400(msg) }
+
+        fun throwHttp400Exception(msg: String, exec: () -> Unit) = try {
+            exec()
+        } catch (e: Exception) {
+            throwHttp400(msg)
+        }
 
         fun isWebSite(website: String, allowEmpty: Boolean = false) =
             (allowEmpty && website == "") || website.startsWith("https://") || website.startsWith("http://")
@@ -74,7 +83,8 @@ class As {
                 try {
                     LocalDate.parse(animeDate.replace("-99", "-01"), DTF_ISO_YMD)
                     return true
-                } catch (e: Exception) { }
+                } catch (e: Exception) {
+                }
             }
             return false
         }

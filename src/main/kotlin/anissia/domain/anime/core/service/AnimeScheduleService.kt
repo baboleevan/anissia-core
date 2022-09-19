@@ -1,8 +1,8 @@
 package anissia.domain.anime.core.service
 
 import anissia.domain.anime.core.model.AnimeScheduleDto
-import anissia.domain.temp.core.service.GoogleAnalyticsProxyService
 import anissia.domain.anime.infrastructure.AnimeRepository
+import anissia.domain.temp.core.service.GoogleAnalyticsProxyService
 import me.saro.kit.CacheStore
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -28,7 +28,7 @@ class AnimeScheduleService(
             .findAllSchedule(week)
             .map { AnimeScheduleDto(it) }
             .run {
-                when(week) {
+                when (week) {
                     "7" -> sortedByDescending { if (it.time != "") it.time else "9999" }
                     "8" -> sortedBy { if (it.time != "") it.time else "9999" }
                     else -> sortedBy { it.time }
@@ -36,12 +36,16 @@ class AnimeScheduleService(
             }
 
     fun getScheduleSvg(width: String, color: String): String =
-        LocalDateTime.now().let { dt -> getSchedule((dt.dayOfWeek.value % 7).toString()).run {
-            val titleBg = color.substring(0, 6); val title = color.substring(6, 12)
-            val ymdBg = color.substring(12, 18); val ymd = color.substring(18, 24)
-            val listBg = color.substring(24, 30); val list = color.substring(30, 36)
-            val height = (this.size * 20 + 50).toString()
-"""<?xml version="1.0" encoding="utf-8"?>
+        LocalDateTime.now().let { dt ->
+            getSchedule((dt.dayOfWeek.value % 7).toString()).run {
+                val titleBg = color.substring(0, 6);
+                val title = color.substring(6, 12)
+                val ymdBg = color.substring(12, 18);
+                val ymd = color.substring(18, 24)
+                val listBg = color.substring(24, 30);
+                val list = color.substring(30, 36)
+                val height = (this.size * 20 + 50).toString()
+                """<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
      width="${width}px" height="${height}px" viewBox="0 0 $width $height" enable-background="new 0 0 $width $height" xml:space="preserve">
@@ -53,6 +57,8 @@ class AnimeScheduleService(
 <tspan x="50%" dy="25" fill="#${ymd}" text-anchor="middle" font-size="12">${dt.format(svgDateFormat)}</tspan>
 ${joinToString("\n") { """<tspan x="2" dy="20"><![CDATA[${it.time} ${it.subject}]]></tspan>""" }}
 </text>
-</svg>""" }}
+</svg>"""
+            }
+        }
             .also { googleAnalyticsProxyService.send("/api/anime/schedule/svg") }
 }

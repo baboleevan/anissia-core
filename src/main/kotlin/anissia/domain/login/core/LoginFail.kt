@@ -5,25 +5,25 @@ import javax.persistence.*
 
 @Entity
 @Table(
-        indexes = [
-                Index(name = "login_fail_idx__failDt", columnList = "failDt"),
-                Index(name = "login_fail_idx__ip_email_failDt", columnList = "ip,email,failDt")
-        ]
+    indexes = [
+        Index(name = "login_fail_idx__failDt", columnList = "failDt"),
+        Index(name = "login_fail_idx__ip_email_failDt", columnList = "ip,email,failDt")
+    ]
 )
-data class LoginFail (
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(nullable = false)
-        var fn: Long = 0,
+data class LoginFail(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    var fn: Long = 0,
 
-        @Column(nullable = false, length = 40)
-        var ip: String = "",
+    @Column(nullable = false, length = 40)
+    var ip: String = "",
 
-        @Column(nullable = false, length = 64)
-        var email: String = "",
+    @Column(nullable = false, length = 64)
+    var email: String = "",
 
-        @Column(nullable = false)
-        var failDt: LocalDateTime = LocalDateTime.now()
+    @Column(nullable = false)
+    var failDt: LocalDateTime = LocalDateTime.now()
 )
 
 /*

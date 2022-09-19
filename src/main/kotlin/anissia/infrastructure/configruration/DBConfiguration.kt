@@ -14,26 +14,25 @@ import javax.sql.DataSource
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = ["anissia.rdb.repository"])
-class DBConfiguration (
+class DBConfiguration(
 
-        @Value("\${anissia.rdb.driverClassName}")
-        private val driverClassName: String,
-        @Value("\${anissia.rdb.jdbcUrl}")
-        private val jdbcUrl: String,
-        @Value("\${anissia.rdb.username}")
-        private val username: String,
-        @Value("\${anissia.rdb.password}")
-        private val password: String
+    @Value("\${anissia.rdb.driverClassName}")
+    private val driverClassName: String,
+    @Value("\${anissia.rdb.jdbcUrl}")
+    private val jdbcUrl: String,
+    @Value("\${anissia.rdb.username}")
+    private val username: String,
+    @Value("\${anissia.rdb.password}")
+    private val password: String
 
 ) {
     @Bean("rdbDataSource")
-    fun dataSource(): DataSource
-            = HikariConfig()
-            .let {
-                it.driverClassName = driverClassName
-                it.jdbcUrl = jdbcUrl
-                it.username = username
-                it.password = password
-                HikariDataSource(it)
-            }
+    fun dataSource(): DataSource = HikariConfig()
+        .let {
+            it.driverClassName = driverClassName
+            it.jdbcUrl = jdbcUrl
+            it.username = username
+            it.password = password
+            HikariDataSource(it)
+        }
 }

@@ -5,25 +5,25 @@ import javax.persistence.*
 
 @Entity
 @Table(
-        uniqueConstraints = [UniqueConstraint(name = "login_token_uk__token", columnNames = ["token"])],
-        indexes = [Index(name = "login_token_idx__expDt", columnList = "expDt")]
+    uniqueConstraints = [UniqueConstraint(name = "login_token_uk__token", columnNames = ["token"])],
+    indexes = [Index(name = "login_token_idx__expDt", columnList = "expDt")]
 )
-data class LoginToken (
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(nullable = false)
-        var tokenNo: Long = 0,
+data class LoginToken(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    var tokenNo: Long = 0,
 
-        @Column(nullable = false, length = 512)
-        var token: String = "",
+    @Column(nullable = false, length = 512)
+    var token: String = "",
 
-        @Column(nullable = false)
-        var an: Long = 0,
+    @Column(nullable = false)
+    var an: Long = 0,
 
-        @Column(nullable = false)
-        var expDt: LocalDateTime = LocalDateTime.now()
+    @Column(nullable = false)
+    var expDt: LocalDateTime = LocalDateTime.now()
 ) {
-        val absoluteToken: String get() = "${tokenNo}-${token}"
+    val absoluteToken: String get() = "${tokenNo}-${token}"
 }
 
 /*

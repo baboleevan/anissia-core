@@ -3,7 +3,7 @@ package anissia.domain.board.core.model
 import anissia.domain.board.core.BoardPost
 import java.time.LocalDateTime
 
-data class BoardPostDto (
+data class BoardPostDto(
     var postNo: Long = 0,
     var topicNo: Long = 0,
     var root: Boolean = false,
@@ -12,7 +12,7 @@ data class BoardPostDto (
     var regDt: LocalDateTime = LocalDateTime.now(),
     var updDt: LocalDateTime = LocalDateTime.now(),
 ) {
-    constructor(boardPost: BoardPost): this(
+    constructor(boardPost: BoardPost) : this(
         postNo = boardPost.postNo,
         topicNo = boardPost.topicNo,
         root = boardPost.root,

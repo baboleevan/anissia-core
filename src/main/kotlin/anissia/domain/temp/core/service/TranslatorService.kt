@@ -1,16 +1,16 @@
 package anissia.domain.temp.core.service
 
 import anissia.domain.account.core.AccountRole
-import anissia.rdb.entity.Agenda
-import anissia.rdb.entity.AgendaPoll
 import anissia.domain.account.infrastructure.AccountRepository
+import anissia.domain.activePanel.core.service.ActivePanelService
+import anissia.domain.agenda.core.AgendaPoll
 import anissia.domain.agenda.infrastructure.AgendaPollRepository
 import anissia.domain.agenda.infrastructure.AgendaRepository
-import anissia.domain.activePanel.core.service.ActivePanelService
 import anissia.domain.temp.core.model.SessionService
 import anissia.domain.temp.core.model.TranslatorApplyDto
 import anissia.domain.temp.core.model.TranslatorApplyPollRequest
 import anissia.domain.temp.core.model.TranslatorApplyRequest
+import anissia.domain.agenda.core.Agenda
 import anissia.shared.ResultData
 import anissia.shared.ResultStatus
 import org.springframework.data.domain.PageRequest
@@ -30,14 +30,15 @@ class TranslatorService(
     private val user get() = sessionService.session
 
     fun getApplyList(page: Int) =
-            agendaRepository.findAllByCodeOrderByStatusAscAgendaNoDesc(code, PageRequest.of(page, 30)).map { TranslatorApplyDto(it) }
+        agendaRepository.findAllByCodeOrderByStatusAscAgendaNoDesc(code, PageRequest.of(page, 30))
+            .map { TranslatorApplyDto(it) }
 
     fun getApplyCount() = mapOf("count" to agendaRepository.countByCodeAndStatus(code, "ACT"))
 
     fun getApply(applyNo: Long) =
-            agendaRepository.findWithPollsByAgendaNoAndCode(applyNo, code)
-                    ?.let { TranslatorApplyDto(it, true) }
-                    ?: TranslatorApplyDto()
+        agendaRepository.findWithPollsByAgendaNoAndCode(applyNo, code)
+            ?.let { TranslatorApplyDto(it, true) }
+            ?: TranslatorApplyDto()
 
     fun createApply(translatorApplyRequest: TranslatorApplyRequest): ResultData<Long> {
         translatorApplyRequest.validate()
@@ -49,30 +50,38 @@ class TranslatorService(
             return ResultData("FAIL", "신청중인 진행사항이 있습니다.")
         }
 
-        if (agendaRepository.existsByCodeAndStatusAndAnAndUpdDtAfter(code, "DONE", user!!.an, LocalDateTime.now().minusDays(7))) {
+        if (agendaRepository.existsByCodeAndStatusAndAnAndUpdDtAfter(
+                code,
+                "DONE",
+                user!!.an,
+                LocalDateTime.now().minusDays(7)
+            )
+        ) {
             return ResultData("FAIL", "심사완료 일주일 후부터 재심사를 요청할 수 있습니다.")
         }
 
-        agendaRepository.saveAndFlush(Agenda(
+        agendaRepository.saveAndFlush(
+            Agenda(
                 code = code,
                 status = "ACT",
                 an = user!!.an,
                 data1 = "ACT",
                 data2 = user!!.name,
                 data3 = translatorApplyRequest.website,
-        )).run { return ResultData("OK", "", agendaNo) }
+            )
+        ).run { return ResultData("OK", "", agendaNo) }
     }
 
     fun createApplyPoll(applyNo: Long, translatorApplyPollRequest: TranslatorApplyPollRequest): ResultStatus {
         var point = translatorApplyPollRequest.point.toInt()
         val comment = translatorApplyPollRequest.comment
         var app = agendaRepository.findByIdOrNull(applyNo)?.takeIf { it.code == code }
-                ?: return ResultStatus("FAIL", "존재하지 않는 신청입니다.")
+            ?: return ResultStatus("FAIL", "존재하지 않는 신청입니다.")
 
         app.takeIf { it.status == "ACT" }
-                ?: return ResultStatus("FAIL", "종료된 신청서입니다.")
+            ?: return ResultStatus("FAIL", "종료된 신청서입니다.")
 
-        if (! (user!!.isManager() || (user!!.an == app.an && point == 0))) {
+        if (!(user!!.isManager() || (user!!.an == app.an && point == 0))) {
             return ResultStatus("FAIL", "권한이 없습니다.")
         }
 
@@ -86,14 +95,16 @@ class TranslatorService(
         if (user!!.isRoot()) {
             point *= 10
         }
-        val poll = agendaPollRepository.save(AgendaPoll(
+        val poll = agendaPollRepository.save(
+            AgendaPoll(
                 agenda = app,
                 voteUp = if (point > 0) point else 0,
                 voteDown = if (point < 0) point else 0,
                 name = user!!.name,
                 an = user!!.an,
                 comment = comment
-        ))
+            )
+        )
 
         val vote = (polls + poll).map { it.voteUp + it.voteDown }.sum()
         if (vote >= 3) {
@@ -117,10 +128,10 @@ class TranslatorService(
     fun existDoingApply() = agendaRepository.existsByCodeAndStatusAndAn(code, "ACT", user!!.an)
 
     private fun toApplySystemPoll(agenda: Agenda, comment: String) = AgendaPoll(
-            agenda = agenda,
-            name = "",
-            an = 0,
-            comment = comment,
+        agenda = agenda,
+        name = "",
+        an = 0,
+        comment = comment,
     )
 
 }

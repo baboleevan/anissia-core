@@ -1,14 +1,14 @@
 package anissia.domain.account.infrastructure
 
-import anissia.infrastructure.configruration.logger
-import anissia.shared.ResultStatus
-import anissia.domain.account.core.model.AccountRegisterRequest
-import anissia.domain.temp.core.model.EmailAuthTokenRequest
-import anissia.infrastructure.common.As
 import anissia.domain.account.core.Account
 import anissia.domain.account.core.AccountRegisterAuth
+import anissia.domain.account.core.model.AccountRegisterRequest
+import anissia.domain.temp.core.model.EmailAuthTokenRequest
 import anissia.domain.temp.core.service.AsyncService
 import anissia.domain.temp.core.service.EmailService
+import anissia.infrastructure.common.As
+import anissia.infrastructure.configruration.logger
+import anissia.shared.ResultStatus
 import com.fasterxml.jackson.core.type.TypeReference
 import me.saro.kit.Texts
 import org.springframework.beans.factory.annotation.Value
@@ -46,11 +46,18 @@ class AccountRegisterService(
             return ResultStatus("FAIL", "이미 가입된 계정입니다.")
         }
 
-        if (accountRepository.existsByName(accountRegisterRequest.name) || accountBanNameRepository.existsById(accountRegisterRequest.name)) {
+        if (accountRepository.existsByName(accountRegisterRequest.name) || accountBanNameRepository.existsById(
+                accountRegisterRequest.name
+            )
+        ) {
             return ResultStatus("FAIL", "사용중이거나 사용할 수 없는 이름입니다.")
         }
 
-        if (accountRegisterAuthRepository.existsByEmailAndExpDtAfter(accountRegisterRequest.email, LocalDateTime.now())) {
+        if (accountRegisterAuthRepository.existsByEmailAndExpDtAfter(
+                accountRegisterRequest.email,
+                LocalDateTime.now()
+            )
+        ) {
             return ResultStatus("FAIL", "인증을 시도한 계정은 ${EXP_HOUR}시간동안 인증을 할 수 없습니다.")
         }
 
@@ -81,10 +88,14 @@ class AccountRegisterService(
 
     @Transactional
     fun registerValidation(tokenRequest: EmailAuthTokenRequest): ResultStatus {
-        val auth: AccountRegisterAuth = accountRegisterAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(tokenRequest.tn, tokenRequest.token, LocalDateTime.now())
-                ?: return ResultStatus("FAIL", "이메일 인증이 만료되었습니다.")
+        val auth: AccountRegisterAuth = accountRegisterAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(
+            tokenRequest.tn,
+            tokenRequest.token,
+            LocalDateTime.now()
+        )
+            ?: return ResultStatus("FAIL", "이메일 인증이 만료되었습니다.")
 
-        val register = As.OBJECT_MAPPER.readValue(auth.data, object: TypeReference<AccountRegisterRequest>() {})
+        val register = As.OBJECT_MAPPER.readValue(auth.data, object : TypeReference<AccountRegisterRequest>() {})
 
         if (accountRepository.existsByEmail(register.email)) {
             return ResultStatus("FAIL", "이미 가입된 계정입니다.")

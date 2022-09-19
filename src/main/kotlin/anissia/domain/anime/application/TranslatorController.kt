@@ -19,9 +19,12 @@ class TranslatorController(
 
     @PostMapping("/apply")
     fun createApply(@RequestBody @Valid translatorApplyRequest: TranslatorApplyRequest) =
-            translatorService.createApply(translatorApplyRequest)
+        translatorService.createApply(translatorApplyRequest)
 
     @PostMapping("/apply/{applyNo:[\\d]+}/poll")
-    fun createApplyPoll(@PathVariable applyNo: Long, @RequestBody @Valid translatorApplyPollRequest: TranslatorApplyPollRequest) =
-            translatorService.createApplyPoll(applyNo, translatorApplyPollRequest)
+    fun createApplyPoll(
+        @PathVariable applyNo: Long,
+        @RequestBody @Valid translatorApplyPollRequest: TranslatorApplyPollRequest
+    ) =
+        translatorService.createApplyPoll(applyNo, translatorApplyPollRequest)
 }

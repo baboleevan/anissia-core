@@ -1,6 +1,6 @@
 package anissia.domain.anime.infrastructure
 
-import anissia.rdb.entity.AnimeCaption
+import anissia.domain.anime.core.AnimeCaption
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.EntityGraph
@@ -16,11 +16,11 @@ interface AnimeCaptionRepository : JpaRepository<AnimeCaption, AnimeCaption.Key>
     fun findAllWithAccountByAnimeNoOrderByUpdDtDesc(animeNo: Long): List<AnimeCaption>
 
     @EntityGraph(attributePaths = ["anime"])
-    @Query("SELECT a FROM AnimeCaption a JOIN a.anime b WHERE a.an = :an AND b.status <> anissia.rdb.entity.AnimeStatus.END ORDER BY a.updDt DESC")
+    @Query("SELECT a FROM AnimeCaption a JOIN a.anime b WHERE a.an = :an AND b.status <> anissia.domain.anime.core.AnimeStatus.END ORDER BY a.updDt DESC")
     fun findAllWithAnimeForAdminCaptionActiveList(an: Long, pageable: Pageable): Page<AnimeCaption>
 
     @EntityGraph(attributePaths = ["anime"])
-    @Query("SELECT a FROM AnimeCaption a JOIN a.anime b WHERE a.an = :an AND b.status = anissia.rdb.entity.AnimeStatus.END ORDER BY a.updDt DESC")
+    @Query("SELECT a FROM AnimeCaption a JOIN a.anime b WHERE a.an = :an AND b.status = anissia.domain.anime.core.AnimeStatus.END ORDER BY a.updDt DESC")
     fun findAllWithAnimeForAdminCaptionEndList(an: Long, pageable: Pageable): Page<AnimeCaption>
 
     @Modifying
@@ -34,7 +34,10 @@ interface AnimeCaptionRepository : JpaRepository<AnimeCaption, AnimeCaption.Key>
     fun findAllByAn(an: Long): List<AnimeCaption>
 
     @EntityGraph(attributePaths = ["account", "anime"])
-    fun findTop20ByUpdDtBeforeAndWebsiteNotOrderByUpdDtDesc(updDt: LocalDateTime = LocalDateTime.now().plusMinutes(10), website: String = ""): List<AnimeCaption>
+    fun findTop20ByUpdDtBeforeAndWebsiteNotOrderByUpdDtDesc(
+        updDt: LocalDateTime = LocalDateTime.now().plusMinutes(10),
+        website: String = ""
+    ): List<AnimeCaption>
 
 //
 //    @EntityGraph(attributePaths = ["anime"])

@@ -1,12 +1,12 @@
 package anissia.domain.temp.aplication
 
-import anissia.domain.anime.core.model.AnimeDto
-import anissia.domain.anime.core.model.AnimeScheduleDto
 import anissia.domain.anime.core.model.AnimeCaptionRequest
+import anissia.domain.anime.core.model.AnimeDto
 import anissia.domain.anime.core.model.AnimeRequest
-import anissia.domain.temp.core.service.AdminService
+import anissia.domain.anime.core.model.AnimeScheduleDto
 import anissia.domain.anime.core.service.AnimeScheduleService
 import anissia.domain.anime.core.service.AnimeService
+import anissia.domain.temp.core.service.AdminService
 import anissia.domain.temp.core.service.TranslatorService
 import org.springframework.data.domain.Page
 import org.springframework.web.bind.annotation.*
@@ -21,7 +21,8 @@ class AdminController(
     private val animeScheduleService: AnimeScheduleService
 ) {
     @GetMapping("/anime/list/{page:[\\d]+}")
-    fun getAnimeList(@RequestParam q: String?, @PathVariable page: Int): Page<AnimeDto> = animeService.getList(q ?: "", page)
+    fun getAnimeList(@RequestParam q: String?, @PathVariable page: Int): Page<AnimeDto> =
+        animeService.getList(q ?: "", page)
 
     @GetMapping("/anime/delist")
     fun getAnimeDelist(): Page<Map<String, Any>> = adminService.getAnimeDelist()
@@ -42,7 +43,8 @@ class AdminController(
     fun addCaption(@PathVariable animeNo: Long) = adminService.addCaption(animeNo)
 
     @PutMapping("/caption/{animeNo}")
-    fun updateCaption(@PathVariable animeNo: Long, @Valid @RequestBody animeCaptionRequest: AnimeCaptionRequest) = adminService.updateCaption(animeNo, animeCaptionRequest)
+    fun updateCaption(@PathVariable animeNo: Long, @Valid @RequestBody animeCaptionRequest: AnimeCaptionRequest) =
+        adminService.updateCaption(animeNo, animeCaptionRequest)
 
     @DeleteMapping("/caption/{animeNo}")
     fun deleteCaption(@PathVariable animeNo: Long) = adminService.deleteCaption(animeNo)
@@ -51,7 +53,8 @@ class AdminController(
     fun addAnime(@Valid @RequestBody animeRequest: AnimeRequest) = adminService.addAnime(animeRequest)
 
     @PutMapping("/anime/{animeNo}")
-    fun updateAnime(@PathVariable animeNo: Long, @Valid @RequestBody animeRequest: AnimeRequest) = adminService.updateAnime(animeNo, animeRequest)
+    fun updateAnime(@PathVariable animeNo: Long, @Valid @RequestBody animeRequest: AnimeRequest) =
+        adminService.updateAnime(animeNo, animeRequest)
 
     @DeleteMapping("/anime/{animeNo}")
     fun deleteAnime(@PathVariable animeNo: Long) = adminService.deleteAnime(animeNo)

@@ -1,21 +1,21 @@
-package anissia.rdb.entity
+package anissia.domain.anime.core
 
 import javax.persistence.*
 
 @Entity
 @Table
-data class AnimeStore (
+data class AnimeStore(
 
-        @Id
-        @Column(nullable = false, length = 64)
-        var code: String = "", // code
+    @Id
+    @Column(nullable = false, length = 64)
+    var code: String = "", // code
 
-        @Column(nullable = true, length = 128)
-        var cv: String = "", // code value : simple value
+    @Column(nullable = true, length = 128)
+    var cv: String = "", // code value : simple value
 
-        @Lob
-        @Column(nullable = true)
-        var data: String = "" // long value
+    @Lob
+    @Column(nullable = true)
+    var data: String = "" // long value
 )
 
 /*

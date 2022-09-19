@@ -1,14 +1,18 @@
 package anissia.domain.temp.core.service
 
-import anissia.infrastructure.configruration.logger
 import anissia.domain.account.core.Account
 import anissia.domain.account.infrastructure.AccountRepository
+import anissia.domain.activePanel.core.ActivePanel
 import anissia.domain.activePanel.core.service.ActivePanelService
+import anissia.domain.agenda.core.Agenda
 import anissia.domain.agenda.core.service.AgendaService
 import anissia.domain.agenda.infrastructure.AgendaRepository
+import anissia.domain.anime.core.Anime
+import anissia.domain.anime.core.AnimeCaption
+import anissia.domain.anime.core.AnimeStatus
 import anissia.domain.anime.core.model.AdminCaptionDto
-import anissia.domain.anime.core.model.AnimeDto
 import anissia.domain.anime.core.model.AnimeCaptionRequest
+import anissia.domain.anime.core.model.AnimeDto
 import anissia.domain.anime.core.model.AnimeRequest
 import anissia.domain.anime.core.service.AnimeService
 import anissia.domain.anime.infrastructure.AnimeCaptionRepository
@@ -16,7 +20,7 @@ import anissia.domain.anime.infrastructure.AnimeGenreRepository
 import anissia.domain.anime.infrastructure.AnimeRepository
 import anissia.domain.temp.core.model.SessionService
 import anissia.infrastructure.common.As
-import anissia.rdb.entity.*
+import anissia.infrastructure.configruration.logger
 import anissia.shared.ResultData
 import anissia.shared.ResultStatus
 import com.fasterxml.jackson.core.type.TypeReference
@@ -49,9 +53,12 @@ class AdminService(
     val userName get() = user?.name ?: 0
 
     fun getCaptionList(active: Int, page: Int): Page<AdminCaptionDto> = (
-            if (active == 1) animeCaptionRepository.findAllWithAnimeForAdminCaptionActiveList(userAn, PageRequest.of(page, 20))
-            else animeCaptionRepository.findAllWithAnimeForAdminCaptionEndList(userAn, PageRequest.of(page, 20))
-            ).map { AdminCaptionDto(it) }
+        if (active == 1) animeCaptionRepository.findAllWithAnimeForAdminCaptionActiveList(
+            userAn,
+            PageRequest.of(page, 20)
+        )
+        else animeCaptionRepository.findAllWithAnimeForAdminCaptionEndList(userAn, PageRequest.of(page, 20))
+        ).map { AdminCaptionDto(it) }
 
     fun addAnime(animeRequest: AnimeRequest) = updateAnime(0, animeRequest)
 
@@ -63,7 +70,8 @@ class AdminService(
         }
 
         var anime: Anime
-        var activePanel = ActivePanel(published = true, code = "ANIME", status = if (isNew) "C" else "U", an = userAn, data1 = "")
+        var activePanel =
+            ActivePanel(published = true, code = "ANIME", status = if (isNew) "C" else "U", an = userAn, data1 = "")
 
         if (isNew) {
             if (animeRepository.existsBySubject(animeRequest.subject)) {
@@ -150,7 +158,7 @@ class AdminService(
             .findByIdOrNull(agendaNo)?.takeIf { it.code == "ANIME-DEL" && it.status == "wait" }
             ?: return ResultData("FAIL", "이미 복원되었거나 존재하지 않는 애니메이션입니다.")
 
-        val animeDto = As.OBJECT_MAPPER.readValue(agenda.data1, object: TypeReference<AnimeDto>() {})
+        val animeDto = As.OBJECT_MAPPER.readValue(agenda.data1, object : TypeReference<AnimeDto>() {})
 
         if (animeRepository.existsById(animeDto.animeNo)) {
             return ResultData("FAIL", "이미 복원되었거나 존재하지 않는 애니메이션입니다.")
@@ -161,17 +169,17 @@ class AdminService(
 
         val anime = animeRepository.save(
             Anime(
-            status = AnimeStatus.valueOf(animeDto.status),
-            week = animeDto.week,
-            time = animeDto.time,
-            subject = animeDto.subject,
-            autocorrect = Koreans.toJasoAtom(animeDto.subject),
-            genres = animeDto.genres,
-            startDate = animeDto.startDate,
-            endDate = animeDto.endDate,
-            website = animeDto.website,
-            captionCount = animeDto.captionCount
-        )
+                status = AnimeStatus.valueOf(animeDto.status),
+                week = animeDto.week,
+                time = animeDto.time,
+                subject = animeDto.subject,
+                autocorrect = Koreans.toJasoAtom(animeDto.subject),
+                genres = animeDto.genres,
+                startDate = animeDto.startDate,
+                endDate = animeDto.endDate,
+                website = animeDto.website,
+                captionCount = animeDto.captionCount
+            )
         )
 
         animeDto.captions.forEach { caption ->
@@ -258,7 +266,7 @@ class AdminService(
 
     fun deleteCaption(account: Account) {
         val captions = animeCaptionRepository.findAllByAn(account.an)
-        val animeNoList = captions.map { it.anime?.animeNo?:0 }
+        val animeNoList = captions.map { it.anime?.animeNo ?: 0 }
         animeCaptionRepository.deleteAll(captions)
         for (animeNo in animeNoList) {
             animeService.updateDocument(animeNo)
@@ -267,5 +275,8 @@ class AdminService(
 
     fun getAnimeDelist(): Page<Map<String, Any>> =
         agendaRepository.findAllByCodeAndStatusOrderByAgendaNoDesc("ANIME-DEL", "wait")
-            .map { As.OBJECT_MAPPER.readValue(it.data1!!, object: TypeReference<HashMap<String, Any>>(){}).apply { put("agendaNo", it.agendaNo) } }
+            .map {
+                As.OBJECT_MAPPER.readValue(it.data1!!, object : TypeReference<HashMap<String, Any>>() {})
+                    .apply { put("agendaNo", it.agendaNo) }
+            }
 }

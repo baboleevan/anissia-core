@@ -20,9 +20,12 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
         private val ROOT = AccountRole.ROOT.name
     }
 
-    private val oaPasswordEncoder = object: PasswordEncoder {
-        override fun matches(rawPassword: CharSequence, encodedPassword: String): Boolean = encodedPassword == encode(rawPassword)
-        override fun encode(rawPassword: CharSequence) = Bytes.toHex(MessageDigest.getInstance("SHA-512").digest("${rawPassword}$0".toByteArray()))!!
+    private val oaPasswordEncoder = object : PasswordEncoder {
+        override fun matches(rawPassword: CharSequence, encodedPassword: String): Boolean =
+            encodedPassword == encode(rawPassword)
+
+        override fun encode(rawPassword: CharSequence) =
+            Bytes.toHex(MessageDigest.getInstance("SHA-512").digest("${rawPassword}$0".toByteArray()))!!
     }
 
     /**
@@ -38,8 +41,8 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
      * SessionService.doLogin()
      */
     @Bean
-    fun passwordEncoder(): PasswordEncoder
-            = "bcrypt".let { DelegatingPasswordEncoder(it, mapOf(it to BCryptPasswordEncoder(), "oa" to oaPasswordEncoder)) }
+    fun passwordEncoder(): PasswordEncoder =
+        "bcrypt".let { DelegatingPasswordEncoder(it, mapOf(it to BCryptPasswordEncoder(), "oa" to oaPasswordEncoder)) }
 
     /**
      * security configure

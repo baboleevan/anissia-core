@@ -1,16 +1,16 @@
 package anissia.domain.account.infrastructure
 
-import anissia.infrastructure.configruration.logger
-import anissia.shared.ResultData
-import anissia.shared.ResultStatus
+import anissia.domain.account.core.Account
+import anissia.domain.account.core.AccountRecoverAuth
 import anissia.domain.account.core.model.AccountRecoverPasswordRequest
 import anissia.domain.account.core.model.AccountRecoverRequest
 import anissia.domain.temp.core.model.EmailAuthTokenRequest
-import anissia.infrastructure.common.As
-import anissia.domain.account.core.Account
-import anissia.domain.account.core.AccountRecoverAuth
 import anissia.domain.temp.core.service.AsyncService
 import anissia.domain.temp.core.service.EmailService
+import anissia.infrastructure.common.As
+import anissia.infrastructure.configruration.logger
+import anissia.shared.ResultData
+import anissia.shared.ResultStatus
 import me.saro.kit.Texts
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -42,8 +42,8 @@ class AccountRecoverService(
     @Transactional
     fun recover(recover: AccountRecoverRequest): ResultStatus {
         var account: Account = accountRepository.findByEmailAndName(recover.email, recover.name)
-            // not exist match info is secret for protect personal information
-            // 개인정보보호를 위해 일치 하지 않는경우에도 일치하는 것과 같은 정보를 내보낸다.
+        // not exist match info is secret for protect personal information
+        // 개인정보보호를 위해 일치 하지 않는경우에도 일치하는 것과 같은 정보를 내보낸다.
             ?: return ResultStatus("OK")
 
         if (accountRecoverAuthRepository.existsByAnAndExpDtAfter(account.an, LocalDateTime.now())) {
@@ -55,10 +55,11 @@ class AccountRecoverService(
         val auth = accountRecoverAuthRepository
             .save(
                 AccountRecoverAuth(
-                token = Texts.createRandomBase62String(128, 256),
-                an = account.an,
-                ip = ip,
-                expDt = LocalDateTime.now().plusHours(EXP_HOUR))
+                    token = Texts.createRandomBase62String(128, 256),
+                    an = account.an,
+                    ip = ip,
+                    expDt = LocalDateTime.now().plusHours(EXP_HOUR)
+                )
             )
 
         asyncService.async {
@@ -76,17 +77,25 @@ class AccountRecoverService(
     }
 
     fun recoverValidation(token: EmailAuthTokenRequest): ResultStatus =
-        accountRecoverAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(token.tn, token.token, LocalDateTime.now())
+        accountRecoverAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(
+            token.tn,
+            token.token,
+            LocalDateTime.now()
+        )
             ?.let { ResultStatus("OK") }
             ?: ResultStatus("FAIL")
 
     @Transactional
     fun recoverPassword(arp: AccountRecoverPasswordRequest): ResultStatus {
-        val auth = accountRecoverAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(arp.tn, arp.token, LocalDateTime.now())
-                ?: return ResultStatus("FAIL", "이메일 인증이 만료되었습니다.")
+        val auth = accountRecoverAuthRepository.findByNoAndTokenAndExpDtAfterAndUsedDtNull(
+            arp.tn,
+            arp.token,
+            LocalDateTime.now()
+        )
+            ?: return ResultStatus("FAIL", "이메일 인증이 만료되었습니다.")
 
         val account = auth.account
-                ?: return ResultStatus("FAIL", "해당 메일인증에서 계정정보를 찾을 수 없습니다.")
+            ?: return ResultStatus("FAIL", "해당 메일인증에서 계정정보를 찾을 수 없습니다.")
 
         accountRecoverAuthRepository.save(auth.apply { usedDt = LocalDateTime.now() })
         accountRepository.save(account.apply { password = passwordEncoder.encode(arp.password) })
@@ -109,6 +118,6 @@ class AccountRecoverService(
             ?: ResultData("FAIL", "2021년 02월 09일 이후 로그인에 성공했거나 존재하지 않는 닉네임입니다.")
 
     private fun masking(text: String) =
-        if (text.length > 3) text.substring(0, 2) + "***" +  text.substring(text.length - 1) else "$text***"
+        if (text.length > 3) text.substring(0, 2) + "***" + text.substring(text.length - 1) else "$text***"
 
 }

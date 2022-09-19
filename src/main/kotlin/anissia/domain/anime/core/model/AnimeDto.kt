@@ -1,9 +1,9 @@
 package anissia.domain.anime.core.model
 
-import anissia.rdb.entity.Anime
+import anissia.domain.anime.core.Anime
 
 
-data class AnimeDto (
+data class AnimeDto(
     var animeNo: Long = 0,
     var status: String = "",
     var week: String = "",
@@ -16,7 +16,7 @@ data class AnimeDto (
     var website: String = "",
     var captions: List<AnimeCaptionDto> = emptyList()
 ) {
-    constructor(anime: Anime, includeCaption: Boolean = false): this(
+    constructor(anime: Anime, includeCaption: Boolean = false) : this(
         animeNo = anime.animeNo,
         status = anime.status.toString(),
         week = anime.week,

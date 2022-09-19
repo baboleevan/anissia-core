@@ -1,6 +1,6 @@
 package anissia.domain.agenda.infrastructure
 
-import anissia.rdb.entity.Agenda
+import anissia.domain.agenda.core.Agenda
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -11,9 +11,16 @@ import java.time.LocalDateTime
 
 interface AgendaRepository : JpaRepository<Agenda, Long>, QuerydslPredicateExecutor<Agenda> {
 
-    fun findAllByCodeAndStatusOrderByAgendaNoDesc(code: String, status: String, pageable: Pageable = PageRequest.of(0, 100)): Page<Agenda>
+    fun findAllByCodeAndStatusOrderByAgendaNoDesc(
+        code: String,
+        status: String,
+        pageable: Pageable = PageRequest.of(0, 100)
+    ): Page<Agenda>
 
-    fun findAllByCodeOrderByStatusAscAgendaNoDesc(code: String, pageable: Pageable = PageRequest.of(0, 100)): Page<Agenda>
+    fun findAllByCodeOrderByStatusAscAgendaNoDesc(
+        code: String,
+        pageable: Pageable = PageRequest.of(0, 100)
+    ): Page<Agenda>
 
     fun countByCodeAndStatus(code: String, status: String): Int
 

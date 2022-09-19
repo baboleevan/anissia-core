@@ -3,17 +3,18 @@ package anissia.domain.temp.core.service
 import anissia.domain.account.core.Account
 import anissia.domain.account.core.AccountRole
 import anissia.domain.account.infrastructure.AccountRepository
-import anissia.domain.board.core.BoardTicker
-import anissia.domain.board.core.BoardTopic
-import anissia.domain.board.infrastructure.BoardTickerRepository
-import anissia.domain.board.infrastructure.BoardTopicRepository
-import anissia.infrastructure.common.As
-import anissia.rdb.entity.*
 import anissia.domain.activePanel.core.service.ActivePanelService
 import anissia.domain.anime.core.service.AnimeRankService
 import anissia.domain.anime.core.service.AnimeService
 import anissia.domain.anime.infrastructure.AnimeGenreRepository
 import anissia.domain.anime.infrastructure.AnimeRepository
+import anissia.domain.board.core.BoardTicker
+import anissia.domain.board.core.BoardTopic
+import anissia.domain.board.infrastructure.BoardTickerRepository
+import anissia.domain.board.infrastructure.BoardTopicRepository
+import anissia.infrastructure.common.As
+import anissia.domain.anime.core.Anime
+import anissia.domain.anime.core.AnimeGenre
 import anissia.shared.ResultStatus
 import me.saro.kit.lang.Koreans
 import org.springframework.beans.factory.annotation.Value
@@ -35,7 +36,8 @@ class DataService(
     private val activePanelService: ActivePanelService,
     @Value("\${env}") private val env: String
 ) {
-    private val fakeRandomHour get() = LocalDateTime.now().minusHours((Math.random() * 800).toLong()).format(As.DTF_RANK_HOUR).toLong()
+    private val fakeRandomHour
+        get() = LocalDateTime.now().minusHours((Math.random() * 800).toLong()).format(As.DTF_RANK_HOUR).toLong()
     private val fakeRandomIp get() = "${(Math.random() * 256).toInt()}.${(Math.random() * 256).toInt()}.${(Math.random() * 256).toInt()}.${(Math.random() * 256).toInt()}"
 
     fun updateAnimeDocument(): ResultStatus {
@@ -70,11 +72,23 @@ class DataService(
 
         // account - admin
         var adminAccount = accountRepository.saveAndFlush(
-            Account(email = "admin@test.com", password = passwordEncoder.encode("asdfasdf"), name = "어드민", roles = mutableSetOf(
-                AccountRole.ROOT, AccountRole.TRANSLATOR))
+            Account(
+                email = "admin@test.com",
+                password = passwordEncoder.encode("asdfasdf"),
+                name = "어드민",
+                roles = mutableSetOf(
+                    AccountRole.ROOT, AccountRole.TRANSLATOR
+                )
+            )
         )
         // account - user
-        var userAccount = accountRepository.saveAndFlush(Account(email = "user@test.com", password = passwordEncoder.encode("asdfasdf"), name = "유저"))
+        var userAccount = accountRepository.saveAndFlush(
+            Account(
+                email = "user@test.com",
+                password = passwordEncoder.encode("asdfasdf"),
+                name = "유저"
+            )
+        )
 
         // board ticker
         boardTickerRepository.save(BoardTicker("notice", "공지사항", "ROOT,TRANSLATOR", ""))
@@ -87,7 +101,7 @@ class DataService(
         }
 
         // anime genre
-        val genres = listOf("SF","공포","드라마","로맨스","모험","무협","스포츠","액션","음악","코미디","판타지","호러")
+        val genres = listOf("SF", "공포", "드라마", "로맨스", "모험", "무협", "스포츠", "액션", "음악", "코미디", "판타지", "호러")
         animeGenreRepository.saveAll(genres.map { AnimeGenre(it) })
 
         // anime
@@ -96,15 +110,15 @@ class DataService(
                 val subject = "$week 애니메이션 $i"
                 animeRepository.save(
                     Anime(
-                    week = "$wi",
-                    time = "${"%02d".format((Math.random() * 23).toInt())}:${"%02d".format((Math.random() * 59).toInt())}",
-                    subject = subject,
-                    autocorrect = Koreans.toJasoAtom(subject),
-                    genres = genres[(genres.size * Math.random()).toInt()],
-                    startDate = "",
-                    endDate = "",
-                    website = "",
-                )
+                        week = "$wi",
+                        time = "${"%02d".format((Math.random() * 23).toInt())}:${"%02d".format((Math.random() * 59).toInt())}",
+                        subject = subject,
+                        autocorrect = Koreans.toJasoAtom(subject),
+                        genres = genres[(genres.size * Math.random()).toInt()],
+                        startDate = "",
+                        endDate = "",
+                        website = "",
+                    )
                 )
             }
         }

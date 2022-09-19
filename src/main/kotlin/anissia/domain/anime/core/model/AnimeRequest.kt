@@ -1,12 +1,12 @@
 package anissia.domain.anime.core.model
 
 import anissia.infrastructure.common.As
-import anissia.rdb.entity.AnimeStatus
+import anissia.domain.anime.core.AnimeStatus
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
 
 
-data class AnimeRequest (
+data class AnimeRequest(
     var status: String = "",
     @Pattern(regexp = "0|1|2|3|4|5|6|7|8", message = "잘못된 요일입니다.")
     var week: String = "",
@@ -28,7 +28,10 @@ data class AnimeRequest (
         As.throwHttp400If("장르는 3개까지만 입력가능합니다.", genresList.size > 3)
         As.throwHttp400If("시작일이 규격에 맞지 않습니다.", !As.isAsAnimeDate(startDate))
         As.throwHttp400If("종료일이 규격에 맞지 않습니다.", !As.isAsAnimeDate(endDate))
-        As.throwHttp400If("시작일은 종료일보다 미래일 수 없습니다.", startDate.isNotEmpty() && endDate.isNotEmpty() && startDate > endDate)
+        As.throwHttp400If(
+            "시작일은 종료일보다 미래일 수 없습니다.",
+            startDate.isNotEmpty() && endDate.isNotEmpty() && startDate > endDate
+        )
         As.throwHttp400If("사이트주소는 공백이거나 http:// https:// 로시작해야합니다.", !As.isWebSite(website, true))
     }
 }

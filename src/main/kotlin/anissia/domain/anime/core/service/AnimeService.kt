@@ -17,8 +17,10 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import javax.servlet.http.HttpServletRequest
+import kotlin.collections.ArrayList
 
 @Service
 class AnimeService(
@@ -41,7 +43,7 @@ class AnimeService(
             val translators = ArrayList<String>()
             val end = q.indexOf("/완결") != -1
 
-            q.toLowerCase().split("[\\s]+".toRegex()).stream().map { it.trim() }
+            q.lowercase(Locale.getDefault()).split("\\s+".toRegex()).stream().map { it.trim() }
                 .filter { it.isNotEmpty() && it != "/완결" }.forEach { word ->
                 if (word[0] == '#' && word.length > 1) genres.add(word.substring(1))
                 else if (word[0] == '@' && word.length > 1) translators.add(word.substring(1))

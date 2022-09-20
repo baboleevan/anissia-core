@@ -5,49 +5,47 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Table(
-    uniqueConstraints = [
+@Table(uniqueConstraints = [
         UniqueConstraint(name = "account_uk__email", columnNames = ["email"]),
         UniqueConstraint(name = "account_uk__name", columnNames = ["name"]),
-    ]
-)
-data class Account(
+])
+data class Account (
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    var an: Long = 0, // account number
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(nullable = false)
+        var an: Long = 0, // account number
 
     @Column(nullable = false, length = 64)
-    var email: String = "",
+        var email: String = "",
 
     @Column(nullable = false, length = 512)
-    var password: String = "",
+        var password: String = "",
 
     @Column(nullable = false, length = 16)
-    var name: String = "",
+        var name: String = "",
 
     @Column(nullable = false)
-    var regDt: LocalDateTime = LocalDateTime.now(),
+        var regDt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    @Column(nullable = false)
-    var lastLoginDt: LocalDateTime = LocalDateTime.now(),
+        @Column(nullable = false)
+        var lastLoginDt: LocalDateTime = LocalDateTime.now(),
 
     @Column(nullable = true)
-    var banExpireDt: LocalDateTime? = null,
+        var banExpireDt: LocalDateTime? = null,
 
     @ElementCollection
-    @CollectionTable(name = "AccountRole", joinColumns = [JoinColumn(name = "an")])
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 10)
-    val roles: MutableSet<AccountRole> = mutableSetOf(),
+        @CollectionTable(name = "AccountRole", joinColumns = [JoinColumn(name = "an")])
+        @Enumerated(EnumType.STRING)
+        @Column(name = "role", nullable = false, length = 10)
+        val roles: MutableSet<AccountRole> = mutableSetOf(),
 
-    // deprecated
+        // deprecated
     @Column(nullable = false, length = 64)
-    var oldAccount: String = ""
+        var oldAccount: String = ""
 ) {
-    val isBan: Boolean get() = lastLoginDt.isAfter(LocalDateTime.now())
-    val isAdmin: Boolean get() = roles.any { it == AccountRole.TRANSLATOR || it == AccountRole.ROOT }
+        val isBan: Boolean get() = lastLoginDt.isAfter(LocalDateTime.now())
+        val isAdmin: Boolean get() = roles.any { it == AccountRole.TRANSLATOR || it == AccountRole.ROOT }
 }
 
 /*

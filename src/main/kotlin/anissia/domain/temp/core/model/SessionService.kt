@@ -1,15 +1,15 @@
 package anissia.domain.temp.core.model
 
+import anissia.infrastructure.configruration.AnissiaAuthentication
+import anissia.infrastructure.common.As
 import anissia.domain.account.core.Account
-import anissia.domain.account.infrastructure.AccountRepository
 import anissia.domain.login.core.LoginFail
 import anissia.domain.login.core.LoginPass
 import anissia.domain.login.core.LoginToken
+import anissia.domain.account.infrastructure.AccountRepository
 import anissia.domain.login.infrastructure.LoginFailRepository
 import anissia.domain.login.infrastructure.LoginPassRepository
 import anissia.domain.login.infrastructure.LoginTokenRepository
-import anissia.infrastructure.common.As
-import anissia.infrastructure.configruration.AnissiaAuthentication
 import anissia.shared.ResultData
 import anissia.shared.ResultStatus
 import me.saro.kit.Texts
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest
  * session service
  */
 @Service
-class SessionService(
+class SessionService (
     private val passwordEncoder: PasswordEncoder,
     private val accountRepository: AccountRepository,
     private val loginFailRepository: LoginFailRepository,
@@ -57,10 +57,10 @@ class SessionService(
                     accountRepository.save(account.apply { password = passwordEncoder.encode(loginRequest.password) })
 
                     val session = Session.cast(account)
-                        .apply { context.authentication = AnissiaAuthentication(this) }
+                            .apply { context.authentication = AnissiaAuthentication(this) }
 
                     val token = loginRequest.takeIf { it.tokenLogin == 1 }
-                        ?.let { updateLoginToken(LoginToken(an = account.an)).absoluteToken } ?: ""
+                            ?.let { updateLoginToken(LoginToken(an = account.an)).absoluteToken }?:""
 
                     // clean up and return
                     loginFailRepository.deleteByIpAndEmail(ip, loginRequest.email)
@@ -85,17 +85,12 @@ class SessionService(
             return ResultData("FAIL", "", null)
         }
 
-        loginTokenRepository.findByTokenNoAndTokenAndExpDtAfter(
-            loginTokenRequest.tokenNo,
-            loginTokenRequest.token,
-            LocalDateTime.now()
-        )
+        loginTokenRepository.findByTokenNoAndTokenAndExpDtAfter(loginTokenRequest.tokenNo, loginTokenRequest.token, LocalDateTime.now())
             ?.let { token ->
                 accountRepository.findWithRolesByAn(token.an)
                     ?.also { account ->
                         accountRepository.save(account.apply { lastLoginDt = LocalDateTime.now() })
-                        val session =
-                            Session.cast(account).apply { context.authentication = AnissiaAuthentication(this) }
+                        val session = Session.cast(account).apply { context.authentication = AnissiaAuthentication(this) }
 
                         // clean up and return
                         loginFailRepository.deleteByIpAndEmail(ip, loginTokenRequest.tokenNo.toString())
@@ -112,8 +107,8 @@ class SessionService(
 
     fun doLogout() = context.run { authentication = null; ResultStatus("OK") }
 
-    fun checkLoginFailCount(ip: String, account: String) =
-        loginFailRepository.countByIpAndEmailAndFailDtAfter(ip, account, LocalDateTime.now().plusMinutes(-30)) < 10
+    fun checkLoginFailCount(ip: String, account: String)
+            = loginFailRepository.countByIpAndEmailAndFailDtAfter(ip, account, LocalDateTime.now().plusMinutes(-30)) < 10
 
     fun updateLoginToken(loginToken: LoginToken) = loginToken.run {
         token = Texts.createRandomBase62String(128, 512)
@@ -123,8 +118,8 @@ class SessionService(
 
     fun updateSession(account: Account?) {
         account?.takeIf { it.an > 0 }
-            ?.let { AnissiaAuthentication(Session.cast(it)) }
-            ?.apply { context.authentication = this }
-            ?: doLogout()
+                ?.let{ AnissiaAuthentication(Session.cast(it)) }
+                ?.apply { context.authentication = this }
+                ?:doLogout()
     }
 }

@@ -1,15 +1,15 @@
 package anissia.domain.anime.core.service
 
+import anissia.infrastructure.configruration.logger
 import anissia.domain.anime.core.model.AnimeCaptionDto
 import anissia.domain.anime.core.model.AnimeDto
+import anissia.infrastructure.elasticsearch.document.AnimeDocument
+import anissia.infrastructure.elasticsearch.repository.AnimeDocumentRepository
+import anissia.infrastructure.common.As
+import anissia.rdb.entity.Anime
 import anissia.domain.anime.infrastructure.AnimeCaptionRepository
 import anissia.domain.anime.infrastructure.AnimeGenreRepository
 import anissia.domain.anime.infrastructure.AnimeRepository
-import anissia.infrastructure.common.As
-import anissia.infrastructure.configruration.logger
-import anissia.infrastructure.elasticsearch.document.AnimeDocument
-import anissia.infrastructure.elasticsearch.repository.AnimeDocumentRepository
-import anissia.domain.anime.core.Anime
 import me.saro.kit.CacheStore
 import me.saro.kit.lang.Koreans
 import org.springframework.data.domain.Page
@@ -41,33 +41,24 @@ class AnimeService(
             val translators = ArrayList<String>()
             val end = q.indexOf("/완결") != -1
 
-            q.toLowerCase().split("[\\s]+".toRegex()).stream().map { it.trim() }
-                .filter { it.isNotEmpty() && it != "/완결" }.forEach { word ->
+            q.toLowerCase().split("[\\s]+".toRegex()).stream().map { it.trim() }.filter { it.isNotEmpty() && it != "/완결" }.forEach { word ->
                 if (word[0] == '#' && word.length > 1) genres.add(word.substring(1))
                 else if (word[0] == '@' && word.length > 1) translators.add(word.substring(1))
                 else keywords.add(word)
             }
 
-            val result = animeDocumentRepository.findAllAnimeNoForAnimeSearch(
-                keywords,
-                genres,
-                translators,
-                end,
-                PageRequest.of(page, 20)
-            )
+            val result = animeDocumentRepository.findAllAnimeNoForAnimeSearch(keywords, genres, translators, end, PageRequest.of(page, 20))
 
             log.info("anime search $keywords $genres $translators $end ${result.totalElements}")
 
-            As.replacePage(
-                result,
-                animeRepository.findAllByAnimeNoInOrderByAnimeNoDesc(result.content).map { AnimeDto(it) })
+            As.replacePage(result, animeRepository.findAllByAnimeNoInOrderByAnimeNoDesc(result.content).map { AnimeDto(it) })
         } else {
             animeRepository.findAllByOrderByAnimeNoDesc(PageRequest.of(page, 20)).map { AnimeDto(it) }
         }
 
     fun getAnimeAutocorrect(q: String): String =
         if (q.length < 3) autocorrectStore.find(q) { getAnimeAutocorrectPrivate(q) }
-        else getAnimeAutocorrectPrivate(q)
+        else  getAnimeAutocorrectPrivate(q)
 
     private fun getAnimeAutocorrectPrivate(q: String): String =
         q.let { it.replace("%", "").trim() }
@@ -91,9 +82,7 @@ class AnimeService(
 
 
     fun getGenres() =
-        genresCacheStore.find("genre") {
-            animeGenreRepository.findAll().map { it.genre }.apply { sorted() }.let { As.toJsonString(it) }
-        }
+        genresCacheStore.find("genre") { animeGenreRepository.findAll().map { it.genre }.apply { sorted() }.let { As.toJsonString(it) } }
 
     fun getCaptionByAnimeNo(animeNo: Long): List<AnimeCaptionDto> =
         animeCaptionRepository.findAllWithAccountByAnimeNoOrderByUpdDtDesc(animeNo).map { AnimeCaptionDto(it) }

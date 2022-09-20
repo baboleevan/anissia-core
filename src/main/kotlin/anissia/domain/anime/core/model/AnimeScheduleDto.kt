@@ -1,8 +1,8 @@
 package anissia.domain.anime.core.model
 
-import anissia.domain.anime.core.Anime
+import anissia.rdb.entity.Anime
 
-data class AnimeScheduleDto(
+data class AnimeScheduleDto (
     var animeNo: Long = 0,
     var status: String = "",
     var time: String = "",
@@ -13,7 +13,7 @@ data class AnimeScheduleDto(
     var endDate: String = "",
     var website: String = "",
 ) {
-    constructor(anime: Anime) : this(
+    constructor(anime: Anime): this(
         animeNo = anime.animeNo,
         status = anime.status.toString(),
         time = if (!anime.week.matches("7|8".toRegex())) anime.time else anime.startDate,

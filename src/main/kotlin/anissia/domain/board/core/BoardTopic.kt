@@ -6,9 +6,9 @@ import javax.persistence.*
 
 @Entity
 @Table(
-    indexes = [Index(name = "board_topic_idx__ticker_fixed_topicNo", columnList = "ticker,fixed,topicNo")]
+        indexes = [Index(name = "board_topic_idx__ticker_fixed_topicNo", columnList = "ticker,fixed,topicNo")]
 )
-data class BoardTopic(
+data class BoardTopic (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -33,22 +33,11 @@ data class BoardTopic(
     var regDt: LocalDateTime = LocalDateTime.now(),
 
     @OneToOne
-    @JoinColumn(
-        name = "an",
-        foreignKey = ForeignKey(name = "board_topic_fn_account"),
-        nullable = false,
-        insertable = false,
-        updatable = false
-    )
+    @JoinColumn(name = "an", foreignKey = ForeignKey(name = "board_topic_fn_account"), nullable = false, insertable = false, updatable = false)
     var account: Account? = null,
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(
-        name = "topicNo",
-        foreignKey = ForeignKey(name = "board_topic_fn_boardPost"),
-        nullable = false,
-        insertable = false
-    )
+    @JoinColumn(name = "topicNo", foreignKey = ForeignKey(name = "board_topic_fn_boardPost"), nullable = false, insertable = false)
     var posts: MutableList<BoardPost> = mutableListOf()
 )
 

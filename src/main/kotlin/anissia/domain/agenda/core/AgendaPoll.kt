@@ -1,41 +1,41 @@
-package anissia.domain.agenda.core
+package anissia.rdb.entity
 
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(
-    indexes = [
-        Index(name = "agenda_poll_idx__agendaNo_pollNo", columnList = "agendaNo,pollNo")
-    ],
+        indexes = [
+                Index(name = "agenda_poll_idx__agendaNo_pollNo", columnList = "agendaNo,pollNo")
+        ],
 )
-data class AgendaPoll(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    var pollNo: Long = 0,
+data class AgendaPoll (
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(nullable = false)
+        var pollNo: Long = 0,
 
-    @Column(nullable = false)
-    var voteUp: Int = 0,
+        @Column(nullable = false)
+        var voteUp: Int = 0,
 
-    @Column(nullable = false)
-    var voteDown: Int = 0,
+        @Column(nullable = false)
+        var voteDown: Int = 0,
 
-    @Column(nullable = false)
-    var name: String = "",
+        @Column(nullable = false)
+        var name: String = "",
 
-    @Column(nullable = false)
-    var an: Long = 0,
+        @Column(nullable = false)
+        var an: Long = 0,
 
-    @Column(nullable = true, length = 255)
-    var comment: String = "",
+        @Column(nullable = true, length = 255)
+        var comment: String = "",
 
-    @Column(nullable = false)
-    var regDt: LocalDateTime = LocalDateTime.now(),
+        @Column(nullable = false)
+        var regDt: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "agendaNo", foreignKey = ForeignKey(name = "agenda_poll_fk_agenda"))
-    var agenda: Agenda? = null
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "agendaNo", foreignKey = ForeignKey(name = "agenda_poll_fk_agenda"))
+        var agenda: Agenda? = null
 )
 
 /*

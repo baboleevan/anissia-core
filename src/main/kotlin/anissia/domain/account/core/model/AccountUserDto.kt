@@ -4,7 +4,7 @@ import anissia.domain.account.core.Account
 import anissia.domain.account.core.AccountRole
 import java.time.LocalDateTime
 
-data class AccountUserDto(
+data class AccountUserDto (
     var email: String = "",
     var name: String = "",
     var regDt: LocalDateTime = LocalDateTime.now(),

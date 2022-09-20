@@ -7,7 +7,7 @@ import javax.persistence.Table
 
 @Entity
 @Table
-data class BoardTicker(
+data class BoardTicker (
     @Id
     @Column(nullable = false, length = 10)
     var ticker: String = "",

@@ -1,7 +1,7 @@
 package anissia.domain.anime.infrastructure
 
-import anissia.domain.anime.core.AnimeHit
-import anissia.domain.anime.core.AnimeHitHour
+import anissia.rdb.entity.AnimeHit
+import anissia.rdb.entity.AnimeHitHour
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -15,7 +15,7 @@ interface AnimeHitRepository : JpaRepository<AnimeHit, Long>, QuerydslPredicateE
     @Query(
         """
         SELECT
-            new anissia.domain.anime.core.AnimeHitHour(a.hour, a.animeNo, count(distinct a.ip))
+            new anissia.rdb.entity.AnimeHitHour(a.hour, a.animeNo, count(distinct a.ip))
         FROM AnimeHit a
         WHERE a.hour < :hour
         GROUP BY a.hour, a.animeNo

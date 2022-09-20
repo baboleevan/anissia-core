@@ -1,4 +1,4 @@
-package anissia.domain.anime.core
+package anissia.rdb.entity
 
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ import javax.persistence.*
         Index(name = "anime_idx__autocorrect", columnList = "autocorrect"),
     ],
 )
-data class Anime(
+data class Anime (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

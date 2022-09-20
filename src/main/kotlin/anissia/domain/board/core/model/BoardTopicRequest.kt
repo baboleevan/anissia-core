@@ -3,7 +3,7 @@ package anissia.domain.board.core.model
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 
-data class BoardTopicRequest(
+data class BoardTopicRequest (
     @field:NotEmpty(message = "제목을 입력해주세요.")
     @field:Size(min = 1, max = 64, message = "제목을 입력해주세요.")
     var topic: String = "",

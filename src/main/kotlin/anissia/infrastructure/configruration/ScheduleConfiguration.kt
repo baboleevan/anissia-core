@@ -12,8 +12,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar
 @Configuration
 @EnableScheduling
 class ScheduleConfiguration(
-    @Value("\${env}") private val env: String,
-    private val animeRankService: AnimeRankService
+        @Value("\${env}") private val env: String,
+        private val animeRankService: AnimeRankService
 ) : SchedulingConfigurer {
 
     private val log = logger<ScheduleConfiguration>()
@@ -22,8 +22,7 @@ class ScheduleConfiguration(
 
     /** hourly batch */
     // start 1 minute in every hour / anime rank
-    @Scheduled(cron = "0 1 * * * ?")
-    fun animeRankBatch() = animeRankService.animeRankBatch()
+    @Scheduled(cron = "0 1 * * * ?") fun animeRankBatch() = animeRankService.animeRankBatch()
 
 
     /** batch configuration */

@@ -1,6 +1,6 @@
 package anissia.domain.anime.infrastructure
 
-import anissia.domain.anime.core.Anime
+import anissia.rdb.entity.Anime
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -12,7 +12,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor
 
 interface AnimeRepository : JpaRepository<Anime, Long>, QuerydslPredicateExecutor<Anime> {
 
-    @Query("SELECT A FROM Anime A WHERE A.status <> anissia.domain.anime.core.AnimeStatus.END AND A.week = :week")
+    @Query("SELECT A FROM Anime A WHERE A.status <> anissia.rdb.entity.AnimeStatus.END AND A.week = :week")
     fun findAllSchedule(week: String): List<Anime>
 
     fun findAllByOrderByAnimeNoDesc(pageable: Pageable): Page<Anime>

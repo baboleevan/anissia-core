@@ -5,7 +5,7 @@ import anissia.domain.board.core.BoardTopic
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDateTime
 
-data class BoardTopicDto(
+data class BoardTopicDto (
     var topicNo: Long = 0,
     var fixed: Boolean = false,
     var topic: String = "",
@@ -15,13 +15,13 @@ data class BoardTopicDto(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var posts: List<BoardPostDto>? = null
 ) {
-    constructor(boardTopic: BoardTopic, posts: List<BoardPost>? = null) : this(
+    constructor(boardTopic: BoardTopic, posts: List<BoardPost>? = null): this(
         topicNo = boardTopic.topicNo,
         fixed = boardTopic.fixed,
         topic = boardTopic.topic,
         postCount = boardTopic.postCount,
         regDt = boardTopic.regDt,
         name = boardTopic.account?.name ?: "탈퇴회원",
-        posts = posts?.map { BoardPostDto(it) }
+        posts = posts ?.map { BoardPostDto(it) }
     )
 }

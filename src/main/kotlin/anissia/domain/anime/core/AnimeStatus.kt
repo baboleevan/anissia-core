@@ -1,4 +1,4 @@
-package anissia.domain.anime.core
+package anissia.rdb.entity
 
 enum class AnimeStatus {
     ON, // on air : 방영중

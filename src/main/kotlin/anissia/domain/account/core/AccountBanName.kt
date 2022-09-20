@@ -7,10 +7,10 @@ import javax.persistence.Table
 
 @Entity
 @Table
-data class AccountBanName(
-    @Id
-    @Column(nullable = false, length = 16)
-    var name: String = ""
+data class AccountBanName (
+        @Id
+        @Column(nullable = false, length = 16)
+        var name: String = ""
 )
 
 /*

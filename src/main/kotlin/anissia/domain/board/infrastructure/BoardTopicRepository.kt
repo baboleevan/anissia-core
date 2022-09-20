@@ -15,10 +15,7 @@ interface BoardTopicRepository : JpaRepository<BoardTopic, Long>, QuerydslPredic
     fun findWithAccountByTickerAndTopicNo(ticker: String, topicNo: Long): BoardTopic?
 
     @EntityGraph(attributePaths = ["account"])
-    fun findAllWithAccountByTickerOrderByTickerAscFixedDescTopicNoDesc(
-        ticker: String,
-        pageable: Pageable
-    ): Page<BoardTopic>
+    fun findAllWithAccountByTickerOrderByTickerAscFixedDescTopicNoDesc(ticker: String, pageable: Pageable): Page<BoardTopic>
 
     fun findTop5ByTickerAndFixedOrderByTopicNoDesc(ticker: String, fixed: Boolean = false): List<BoardTopic>
 

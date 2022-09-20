@@ -1,17 +1,17 @@
 package anissia.domain.account.infrastructure
 
+import anissia.infrastructure.configruration.logger
+import anissia.domain.account.core.model.AccountUserDto
+import anissia.shared.ResultStatus
 import anissia.domain.account.core.model.AccountUpdateNameRequest
 import anissia.domain.account.core.model.AccountUpdatePasswordRequest
-import anissia.domain.account.core.model.AccountUserDto
-import anissia.domain.activePanel.core.service.ActivePanelService
+import anissia.rdb.entity.Agenda
 import anissia.domain.agenda.infrastructure.AgendaRepository
-import anissia.domain.anime.core.service.AnimeService
 import anissia.domain.anime.infrastructure.AnimeCaptionRepository
+import anissia.domain.activePanel.core.service.ActivePanelService
+import anissia.domain.anime.core.service.AnimeService
 import anissia.domain.temp.core.model.SessionService
 import anissia.domain.temp.core.service.TranslatorService
-import anissia.infrastructure.configruration.logger
-import anissia.domain.agenda.core.Agenda
-import anissia.shared.ResultStatus
 import org.slf4j.Logger
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -23,7 +23,7 @@ import java.time.LocalDateTime
  *
  */
 @Service
-class AccountService(
+class AccountService (
     private val sessionService: SessionService,
     private val accountRepository: AccountRepository,
     private val passwordEncoder: PasswordEncoder,
@@ -61,13 +61,7 @@ class AccountService(
             return ResultStatus("FAIL", "자막제작자 신청중에는 이름을 바꿀 수 없습니다.")
         }
 
-        if (agendaRepository.existsByCodeAndStatusAndAnAndUpdDtAfter(
-                codeUpdateName,
-                "DONE",
-                an,
-                LocalDateTime.now().minusDays(1)
-            )
-        ) {
+        if (agendaRepository.existsByCodeAndStatusAndAnAndUpdDtAfter(codeUpdateName, "DONE", an, LocalDateTime.now().minusDays(1))) {
             return ResultStatus("FAIL", "이름은 하루에 한번만 바꿀 수 있습니다.")
         }
 
@@ -75,23 +69,21 @@ class AccountService(
             return ResultStatus("FAIL", "사용중이거나 사용할 수 없는 이름입니다.")
         }
 
-        agendaRepository.saveAndFlush(
-            Agenda(
-                code = codeUpdateName,
-                status = "DONE",
-                an = an,
-                data1 = "DONE",
-                data2 = oldName,
-                data3 = newName,
-            )
-        )
+        agendaRepository.saveAndFlush(Agenda(
+            code = codeUpdateName,
+            status = "DONE",
+            an = an,
+            data1 = "DONE",
+            data2 = oldName,
+            data3 = newName,
+        ))
 
         accountRepository.saveAndFlush(account.apply { name = newName })
 
         // 운영진
         if (account.roles.isNotEmpty()) {
             animeCaptionRepository.findAllByAn(an).forEach {
-                animeService.updateDocument(it.anime?.animeNo ?: 0)
+                animeService.updateDocument(it.anime?.animeNo?:0)
             }
             activePanelService.saveText("운영진 [$oldName]님의 닉네임이 [$newName]님으로 변경되었습니다.", true)
         }

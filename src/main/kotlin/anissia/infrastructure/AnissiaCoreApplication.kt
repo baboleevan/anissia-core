@@ -9,24 +9,23 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication(
-    exclude = [
-        ElasticsearchDataAutoConfiguration::class,
-        JpaRepositoriesAutoConfiguration::class
-    ]
+	exclude = [
+		ElasticsearchDataAutoConfiguration::class,
+		JpaRepositoriesAutoConfiguration::class
+	]
 )
 @ComponentScan("anissia", "anissia.*")
-class AnissiaCoreApplication : CommandLineRunner {
+class AnissiaCoreApplication: CommandLineRunner {
 
-    var log = logger<AnissiaCoreApplication>()
+	var log = logger<AnissiaCoreApplication>()
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            runApplication<AnissiaCoreApplication>(*args)
-        }
-    }
+	companion object {
+		@JvmStatic fun main(args: Array<String>) {
+			runApplication<AnissiaCoreApplication>(*args)
+		}
+	}
 
-    override fun run(vararg args: String) {
-        log.info("start server")
-    }
+	override fun run(vararg args: String) {
+		log.info("start server")
+	}
 }

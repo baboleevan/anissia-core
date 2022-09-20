@@ -8,7 +8,7 @@ class LegacyController() {
 
     @RequestMapping("/anitime/list_img", produces = ["image/svg+xml;charset=utf-8"])
     fun svg(): String =
-        """<?xml version="1.0" encoding="utf-8"?>
+"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      width="170px" height="250px" viewBox="0 0 170 250" enable-background="new 0 0 170 250" xml:space="preserve">
@@ -28,8 +28,7 @@ class LegacyController() {
 </svg>"""
 
     @RequestMapping("/anitime/list")
-    fun list() =
-        """[{"i":0,"s":"애니시아 API 주소 이전","t":"0000","g":"공지","l":"https://anissia.net","a":true,"sd":"00000000","ed":"00000000"}]"""
+    fun list() = """[{"i":0,"s":"애니시아 API 주소 이전","t":"0000","g":"공지","l":"https://anissia.net","a":true,"sd":"00000000","ed":"00000000"}]"""
 
     @RequestMapping("/anitime/cap")
     fun cap() = """[{"s":"00010","d":"20210208000000","a":"https://anissia.net","n":"애니시아"}]"""

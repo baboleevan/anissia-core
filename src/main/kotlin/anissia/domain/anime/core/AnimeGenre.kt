@@ -1,4 +1,4 @@
-package anissia.domain.anime.core
+package anissia.rdb.entity
 
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -7,10 +7,10 @@ import javax.persistence.Table
 
 @Entity
 @Table
-data class AnimeGenre(
-    @Id
-    @Column(nullable = false, length = 100)
-    var genre: String = ""
+data class AnimeGenre (
+        @Id
+        @Column(nullable = false, length = 100)
+        var genre: String = ""
 )
 
 /*

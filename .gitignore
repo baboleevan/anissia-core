@@ -9,7 +9,6 @@ build/
 email.json
 anissia-local.**
 logs
-tmp
 
 ### STS ###
 .apt_generated

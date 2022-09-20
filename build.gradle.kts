@@ -13,25 +13,12 @@ plugins {
 	id("org.springframework.boot") version "2.7.1"
 	id("io.spring.dependency-management") version "1.0.12.RELEASE"
 	id("org.ec4j.editorconfig") version "0.0.3"
-	id("idea")
 }
 
 group = "anissia"
 version = "1.0"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
-
-// idea setting
-idea {
-	module {
-		excludeDirs = setOf(
-			File("$projectDir/logs"),
-			File("$projectDir/anissia-local.lock.db"),
-			File("$projectDir/anissia-local.mv.db"),
-			File("$projectDir/anissia-local.trace.db")
-		)
-	}
-}
 
 repositories {
 	mavenCentral()

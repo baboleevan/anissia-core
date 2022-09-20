@@ -1,4 +1,4 @@
-package anissia.domain.login.core.ports.outbound
+package anissia.domain.login.infrastructure
 
 import anissia.domain.login.core.LoginFail
 import org.springframework.data.jpa.repository.JpaRepository

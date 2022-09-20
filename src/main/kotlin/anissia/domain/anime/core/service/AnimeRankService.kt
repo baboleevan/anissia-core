@@ -1,9 +1,9 @@
 package anissia.domain.anime.core.service
 
 import anissia.domain.anime.core.model.AnimeRankDto
-import anissia.domain.anime.core.ports.outbound.AnimeHitHourRepository
-import anissia.domain.anime.core.ports.outbound.AnimeHitRepository
-import anissia.domain.anime.core.ports.outbound.AnimeStoreRepository
+import anissia.domain.anime.infrastructure.AnimeHitHourRepository
+import anissia.domain.anime.infrastructure.AnimeHitRepository
+import anissia.domain.anime.infrastructure.AnimeStoreRepository
 import anissia.infrastructure.common.As
 import anissia.domain.anime.core.AnimeHit
 import anissia.domain.anime.core.AnimeStore

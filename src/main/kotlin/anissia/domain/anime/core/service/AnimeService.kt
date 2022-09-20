@@ -2,9 +2,9 @@ package anissia.domain.anime.core.service
 
 import anissia.domain.anime.core.model.AnimeCaptionDto
 import anissia.domain.anime.core.model.AnimeDto
-import anissia.domain.anime.core.ports.outbound.AnimeCaptionRepository
-import anissia.domain.anime.core.ports.outbound.AnimeGenreRepository
-import anissia.domain.anime.core.ports.outbound.AnimeRepository
+import anissia.domain.anime.infrastructure.AnimeCaptionRepository
+import anissia.domain.anime.infrastructure.AnimeGenreRepository
+import anissia.domain.anime.infrastructure.AnimeRepository
 import anissia.infrastructure.common.As
 import anissia.infrastructure.configruration.logger
 import anissia.infrastructure.elasticsearch.document.AnimeDocument

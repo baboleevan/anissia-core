@@ -1,10 +1,10 @@
 package anissia.domain.activePanel.core.service
 
 import anissia.domain.account.core.AccountRole
-import anissia.domain.account.core.ports.outbound.AccountRepository
+import anissia.domain.account.infrastructure.AccountRepository
 import anissia.domain.activePanel.core.model.ActivePanelDto
 import anissia.domain.activePanel.core.model.ActivePanelNoticeRequest
-import anissia.domain.activePanel.core.ports.outbound.ActivePanelRepository
+import anissia.domain.activePanel.infrastructure.ActivePanelRepository
 import anissia.domain.temp.core.model.SessionService
 import anissia.domain.temp.core.service.AdminService
 import anissia.infrastructure.common.As

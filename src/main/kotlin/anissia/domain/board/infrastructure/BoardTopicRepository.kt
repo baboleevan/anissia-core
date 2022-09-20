@@ -1,4 +1,4 @@
-package anissia.domain.board.core.ports.outbound
+package anissia.domain.board.infrastructure
 
 import anissia.domain.board.core.BoardTopic
 import org.springframework.data.domain.Page

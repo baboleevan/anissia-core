@@ -1,13 +1,13 @@
 package anissia.domain.temp.core.model
 
 import anissia.domain.account.core.Account
-import anissia.domain.account.core.ports.outbound.AccountRepository
+import anissia.domain.account.infrastructure.AccountRepository
 import anissia.domain.login.core.LoginFail
 import anissia.domain.login.core.LoginPass
 import anissia.domain.login.core.LoginToken
-import anissia.domain.login.core.ports.outbound.LoginFailRepository
-import anissia.domain.login.core.ports.outbound.LoginPassRepository
-import anissia.domain.login.core.ports.outbound.LoginTokenRepository
+import anissia.domain.login.infrastructure.LoginFailRepository
+import anissia.domain.login.infrastructure.LoginPassRepository
+import anissia.domain.login.infrastructure.LoginTokenRepository
 import anissia.infrastructure.common.As
 import anissia.infrastructure.configruration.AnissiaAuthentication
 import anissia.shared.ResultData

@@ -1,11 +1,11 @@
 package anissia.domain.temp.core.service
 
 import anissia.domain.account.core.AccountRole
-import anissia.domain.account.core.ports.outbound.AccountRepository
+import anissia.domain.account.infrastructure.AccountRepository
 import anissia.domain.activePanel.core.service.ActivePanelService
 import anissia.domain.agenda.core.AgendaPoll
-import anissia.domain.agenda.core.ports.outbound.AgendaPollRepository
-import anissia.domain.agenda.core.ports.outbound.AgendaRepository
+import anissia.domain.agenda.infrastructure.AgendaPollRepository
+import anissia.domain.agenda.infrastructure.AgendaRepository
 import anissia.domain.temp.core.model.SessionService
 import anissia.domain.temp.core.model.TranslatorApplyDto
 import anissia.domain.temp.core.model.TranslatorApplyPollRequest

@@ -1,7 +1,7 @@
 package anissia.domain.anime.core.service
 
 import anissia.domain.anime.core.model.AnimeCaptionRecentDto
-import anissia.domain.anime.core.ports.outbound.AnimeCaptionRepository
+import anissia.domain.anime.infrastructure.AnimeCaptionRepository
 import anissia.infrastructure.common.As
 import anissia.infrastructure.configruration.logger
 import me.saro.kit.CacheStore

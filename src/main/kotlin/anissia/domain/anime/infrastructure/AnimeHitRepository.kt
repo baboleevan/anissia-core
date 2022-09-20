@@ -1,4 +1,4 @@
-package anissia.domain.anime.core.ports.outbound
+package anissia.domain.anime.infrastructure
 
 import anissia.domain.anime.core.AnimeHit
 import anissia.domain.anime.core.AnimeHitHour

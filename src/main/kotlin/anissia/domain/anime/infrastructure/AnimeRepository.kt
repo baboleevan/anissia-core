@@ -1,4 +1,4 @@
-package anissia.domain.anime.core.ports.outbound
+package anissia.domain.anime.infrastructure
 
 import anissia.domain.anime.core.Anime
 import org.springframework.data.domain.Page

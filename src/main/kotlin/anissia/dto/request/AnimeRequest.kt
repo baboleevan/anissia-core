@@ -14,7 +14,6 @@ data class AnimeRequest (
     var time: String = "",
     @NotEmpty(message = "애니메이션 제목을 입력해주세요.")
     var subject: String = "",
-    @NotEmpty(message = "애니메이션 원제를 입력해주세요.")
     var originalSubject: String = "",
     var genres: String = "",
     var startDate: String = "",
@@ -26,7 +25,6 @@ data class AnimeRequest (
     val statusEnum get() = AnimeStatus.valueOf(status)
     fun validate() {
         As.throwHttp400If("애니메이션 제목을 입력해주세요.", subject.isBlank())
-        As.throwHttp400If("애니메이션 원제를 입력해주세요.", originalSubject.isBlank())
         As.throwHttp400Exception("존재하지 않는 상태입니다.") { statusEnum }
         As.throwHttp400If("장르가 입력되지 않았습니다.", genres.isBlank())
         As.throwHttp400If("장르는 3개까지만 입력가능합니다.", genresList.size > 3)

@@ -65,11 +65,13 @@ class AdminService(
                 week = animeRequest.week,
                 time = animeRequest.time,
                 subject = animeRequest.subject,
+                originalSubject = animeRequest.originalSubject,
                 autocorrect = Koreans.toJasoAtom(animeRequest.subject),
                 genres = animeRequest.genres,
                 startDate = animeRequest.startDate,
                 endDate = animeRequest.endDate,
                 website = animeRequest.website,
+                twitter = animeRequest.twitter,
             )
         } else {
             anime = animeRepository.findByIdOrNull(animeNo)
@@ -79,10 +81,12 @@ class AdminService(
                         it.status == animeRequest.statusEnum &&
                         it.time == animeRequest.time &&
                         it.subject == animeRequest.subject &&
+                        it.originalSubject == animeRequest.originalSubject &&
                         it.genres == animeRequest.genres &&
                         it.startDate == animeRequest.startDate &&
                         it.endDate == animeRequest.endDate &&
-                        it.website == animeRequest.website
+                        it.website == animeRequest.website &&
+                        it.twitter == animeRequest.twitter
                     ) {
                         return ResultStatus("FAIL", "변경사항이 없습니다.")
                     }
@@ -93,11 +97,13 @@ class AdminService(
                     week = animeRequest.week
                     time = animeRequest.time
                     subject = animeRequest.subject
+                    originalSubject = animeRequest.originalSubject
                     autocorrect = Koreans.toJasoAtom(animeRequest.subject)
                     genres = animeRequest.genres
                     startDate = animeRequest.startDate
                     endDate = animeRequest.endDate
                     website = animeRequest.website
+                    twitter = animeRequest.twitter
                 }
                 ?.also { activePanel.data3 = As.toJsonString(AnimeDto(it, false)) }
                 ?: return ResultStatus("FAIL", "존재하지 않는 애니메이션입니다.")
@@ -155,11 +161,13 @@ class AdminService(
             week = animeDto.week,
             time = animeDto.time,
             subject = animeDto.subject,
+            originalSubject = animeDto.originalSubject,
             autocorrect = Koreans.toJasoAtom(animeDto.subject),
             genres = animeDto.genres,
             startDate = animeDto.startDate,
             endDate = animeDto.endDate,
             website = animeDto.website,
+            twitter = animeDto.twitter,
             captionCount = animeDto.captionCount
         ))
 

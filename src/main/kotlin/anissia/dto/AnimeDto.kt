@@ -9,11 +9,13 @@ data class AnimeDto (
     var week: String = "",
     var time: String = "",
     var subject: String = "",
+    var originalSubject: String = "",
     var captionCount: Int = 0,
     var genres: String = "",
     var startDate: String = "",
     var endDate: String = "",
     var website: String = "",
+    var twitter: String = "",
     var captions: List<AnimeCaptionDto> = emptyList()
 ) {
     constructor(anime: Anime, includeCaption: Boolean = false): this(
@@ -22,11 +24,13 @@ data class AnimeDto (
         week = anime.week,
         time = anime.time,
         subject = anime.subject,
+        originalSubject = anime.originalSubject,
         captionCount = anime.captionCount,
         genres = anime.genres,
         startDate = anime.startDate,
         endDate = anime.endDate,
         website = anime.website,
+        twitter = anime.twitter,
         captions = if (includeCaption) anime.captions.map { AnimeCaptionDto(it) } else emptyList()
     )
 }

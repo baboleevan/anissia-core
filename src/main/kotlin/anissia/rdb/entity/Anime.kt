@@ -47,6 +47,9 @@ data class Anime (
     @Column(nullable = false, length = 100)
     var subject: String = "",
 
+    @Column(nullable = false, length = 100)
+    var originalSubject: String = "",
+
     @Column(nullable = false, length = 512)
     var autocorrect: String = "",
 
@@ -62,6 +65,9 @@ data class Anime (
     @Column(nullable = false, length = 128)
     var website: String = "",
 
+    @Column(nullable = false, length = 128)
+    var twitter: String = "",
+
     @Column(nullable = false)
     var captionCount: Int = 0,
 
@@ -74,17 +80,21 @@ data class Anime (
 )
 
 /*
+-- PRIMARY KEY (`originalSubject`), 추가해야함
+
 CREATE TABLE `anime` (
   `anime_no` bigint(20) NOT NULL AUTO_INCREMENT,
   `status` varchar(255) NOT NULL,
   `week` varchar(1) NOT NULL,
   `time` varchar(5) NOT NULL,
   `subject` varchar(100) NOT NULL,
+  `original_subject` varchar(100) NOT NULL,
   `autocorrect` varchar(512) NOT NULL,
   `genres` varchar(64) NOT NULL,
   `start_date` varchar(10) NOT NULL,
   `end_date` varchar(10) NOT NULL,
   `website` varchar(128) NOT NULL,
+  `twitter` varchar(128) NOT NULL,
   `caption_count` int(11) NOT NULL,
   `upd_dt` datetime NOT NULL,
   PRIMARY KEY (`anime_no`),

@@ -17,8 +17,10 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import javax.servlet.http.HttpServletRequest
+import kotlin.collections.ArrayList
 
 @Service
 class AnimeService(
@@ -41,19 +43,19 @@ class AnimeService(
             val translators = ArrayList<String>()
             val end = q.indexOf("/완결") != -1
 
-            q.toLowerCase().split("[\\s]+".toRegex()).stream().map { it.trim() }.filter { it.isNotEmpty() && it != "/완결" }.forEach { word ->
+            q.lowercase(Locale.getDefault()).split("[\\s]+".toRegex()).stream().map { it.trim() }.filter { it.isNotEmpty() && it != "/완결" }.forEach { word ->
                 if (word[0] == '#' && word.length > 1) genres.add(word.substring(1))
                 else if (word[0] == '@' && word.length > 1) translators.add(word.substring(1))
                 else keywords.add(word)
             }
 
-            val result = animeDocumentRepository.findAllAnimeNoForAnimeSearch(keywords, genres, translators, end, PageRequest.of(page, 20))
+            val result = animeDocumentRepository.findAllAnimeNoForAnimeSearch(keywords, genres, translators, end, PageRequest.of(page, 30))
 
             log.info("anime search $keywords $genres $translators $end ${result.totalElements}")
 
             As.replacePage(result, animeRepository.findAllByAnimeNoInOrderByAnimeNoDesc(result.content).map { AnimeDto(it) })
         } else {
-            animeRepository.findAllByOrderByAnimeNoDesc(PageRequest.of(page, 20)).map { AnimeDto(it) }
+            animeRepository.findAllByOrderByAnimeNoDesc(PageRequest.of(page, 30)).map { AnimeDto(it) }
         }
 
     fun getAnimeAutocorrect(q: String): String =

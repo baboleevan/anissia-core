@@ -46,11 +46,11 @@ class AdminService(
 
     fun addAnime(animeRequest: AnimeRequest) = updateAnime(0, animeRequest)
 
-    fun updateAnime(animeNo: Long, animeRequest: AnimeRequest): ResultStatus {
+    fun updateAnime(animeNo: Long, animeRequest: AnimeRequest): ResultData<Long> {
         val isNew = animeNo == 0L
         animeRequest.validate()
         if (animeGenreRepository.countByGenreIn(animeRequest.genresList).toInt() != animeRequest.genresList.size) {
-            return ResultStatus("FAIL", "장르 입력이 잘못되었습니다.")
+            return ResultData("FAIL", "장르 입력이 잘못되었습니다.")
         }
 
         var anime: Anime
@@ -58,7 +58,7 @@ class AdminService(
 
         if (isNew) {
             if (animeRepository.existsBySubject(animeRequest.subject)) {
-                return ResultStatus("FAIL", "이미 동일한 이름의 작품이 존재합니다.")
+                return ResultData("FAIL", "이미 동일한 이름의 작품이 존재합니다.")
             }
             anime = Anime(
                 status = animeRequest.statusEnum,
@@ -88,7 +88,7 @@ class AdminService(
                         it.website == animeRequest.website &&
                         it.twitter == animeRequest.twitter
                     ) {
-                        return ResultStatus("FAIL", "변경사항이 없습니다.")
+                        return ResultData("FAIL", "변경사항이 없습니다.")
                     }
                 }
                 ?.also { activePanel.data2 = As.toJsonString(AnimeDto(it, false)) }
@@ -106,7 +106,7 @@ class AdminService(
                     twitter = animeRequest.twitter
                 }
                 ?.also { activePanel.data3 = As.toJsonString(AnimeDto(it, false)) }
-                ?: return ResultStatus("FAIL", "존재하지 않는 애니메이션입니다.")
+                ?: return ResultData("FAIL", "존재하지 않는 애니메이션입니다.")
         }
 
         animeRepository.save(anime)
@@ -120,7 +120,7 @@ class AdminService(
         activePanelService.save(activePanel)
         animeService.updateDocument(anime)
 
-        return ResultStatus("OK")
+        return ResultData("OK", "", anime.animeNo)
     }
 
     @Transactional

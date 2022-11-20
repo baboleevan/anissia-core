@@ -45,6 +45,9 @@ class AnimeController(
     @GetMapping("/caption/recent", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCaptionRecent() = animeCaptionRecentService.getRecentList()
 
+    @GetMapping("/caption/recent/{page:\\d+}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getCaptionRecent(@PathVariable page: Int) = animeCaptionRecentService.getRecentList(page)
+
     // - schedule
 
     @GetMapping("/schedule/{week:[0-8]}")

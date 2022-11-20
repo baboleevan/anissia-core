@@ -33,8 +33,11 @@ interface AnimeCaptionRepository : JpaRepository<AnimeCaption, AnimeCaption.Key>
 
     fun findAllByAn(an: Long): List<AnimeCaption>
 
+    //@EntityGraph(attributePaths = ["account", "anime"])
+    //fun findTop20ByUpdDtBeforeAndWebsiteNotOrderByUpdDtDesc(updDt: LocalDateTime = LocalDateTime.now().plusMinutes(10), website: String = ""): List<AnimeCaption>
+
     @EntityGraph(attributePaths = ["account", "anime"])
-    fun findTop20ByUpdDtBeforeAndWebsiteNotOrderByUpdDtDesc(updDt: LocalDateTime = LocalDateTime.now().plusMinutes(10), website: String = ""): List<AnimeCaption>
+    fun findAllByWebsiteNotOrderByUpdDtDesc(pageable: Pageable, website: String = ""): Page<AnimeCaption>
 
 //
 //    @EntityGraph(attributePaths = ["anime"])
